@@ -98,9 +98,31 @@ typedef void (^BlurCompletionBlock)(void);
         
     }
     
-    
+    [self registerForApplicationStateNotifications];
+
     
 }
+
+-(void)registerForApplicationStateNotifications{
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandling:) name:UIApplicationWillResignActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandling:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(notificationHandling:) name:UIApplicationDidBecomeActiveNotification object:nil];
+}
+
+-(void)notificationHandling:(NSNotification*)notification{
+    
+    if ([notification.name isEqualToString: UIApplicationWillResignActiveNotification]){
+        [_blurredContainerView setAlpha:1.0f];
+    } else {
+        [_blurredContainerView setAlpha:0.0f];
+
+    }
+}
+
+
 
 -(void)showCamera{
     
@@ -155,31 +177,22 @@ typedef void (^BlurCompletionBlock)(void);
     
     _blurredImageView = [[UIImageView alloc] initWithFrame:_blurredContainerView.bounds];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
-        
-        [[[[[UIApplication sharedApplication] delegate] window] layer] renderInContext:UIGraphicsGetCurrentContext()];
-        UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-        UIGraphicsEndImageContext();
-        
-        _blurredImageView.image = [image blurredImageWithRadius:10.0f iterations:1 tintColor:[UIColor clearColor]];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [_blurredContainerView addSubview:_blurredImageView];
-            
-            [UIView animateWithDuration:0.5f animations:^{
-                [_blurredContainerView setAlpha:1.0f];
-                
-            } completion:^(BOOL finished) {
-                block();
-            }];
-
-        });
-      
-    });
+    UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
     
-   
+    [[[[[UIApplication sharedApplication] delegate] window] layer] renderInContext:UIGraphicsGetCurrentContext()];
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    _blurredImageView.image = [image blurredImageWithRadius:10.0f iterations:1 tintColor:[UIColor clearColor]];
+    [_blurredContainerView addSubview:_blurredImageView];
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [_blurredContainerView setAlpha:1.0f];
+        
+    } completion:^(BOOL finished) {
+        block();
+    }];
+
     
     
 }
@@ -190,9 +203,8 @@ typedef void (^BlurCompletionBlock)(void);
     [UIView animateWithDuration:0.5f animations:^{
         [_blurredContainerView setAlpha:0.0f];
     } completion:^(BOOL finished) {
-        _blurredImageView.image = nil;
-        _cardIOView = nil;
         [_cardIOView removeFromSuperview];
+        [_cancelCameraButton removeFromSuperview];
     }];
     
 }
