@@ -12,5 +12,9 @@
 
 +(UIColor*)venmoBlue;
 
++(UIColor*)venmoGray;
+
++(UIColor*)venmoRed;
+
 
 @end
