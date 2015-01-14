@@ -217,9 +217,23 @@ typedef enum {
         case cardTypeUnknown:
             return [UIImage imageNamed:@"GenericCard"];
             break;
-            
-        default:
+        case cardTypeDiscover:
+            return [UIImage imageNamed:@"Discover"];
+            break;
+        case cardTypeJCL:
+            return [UIImage imageNamed:@"JCB"];
+            break;
+        case cardTypeMasterCard:
+            return [UIImage imageNamed:@"Mastercard"];
+            break;
+        case cardTypeAmericanExpress:
             return [UIImage imageNamed:@"Amex"];
+            break;
+        case cardTypeVisa:
+            return [UIImage imageNamed:@"Visa"];
+            break;
+        default:
+            return [UIImage imageNamed:@"GenericCard"];
             break;
     }
     
@@ -241,23 +255,60 @@ typedef enum {
     [self removeNonDigits:textField.text
 andPreserveCursorPosition:&targetCursorPosition];
     
-    if ([cardNumberWithoutSpaces length] > 19) {
-        // If the user is trying to enter more than 19 digits, we prevent
-        // their change, leaving the text field in  its previous state.
-        // While 16 digits is usual, credit card numbers have a hard
-        // maximum of 19 digits defined by ISO standard 7812-1 in section
-        // 3.8 and elsewhere. Applying this hard maximum here rather than
-        // a maximum of 16 ensures that users with unusual card numbers
-        // will still be able to enter their card number even if the
-        // resultant formatting is odd.
-        [textField setText:_previousTextFieldContent];
-        textField.selectedTextRange = _previousSelection;
-        return;
+    [self checkCardTypeForString:cardNumberWithoutSpaces];
+    
+    _creditCardImageView.image = [self imageForCardStatus];
+    
+//    if ([cardNumberWithoutSpaces length] > 16) {
+//        // If the user is trying to enter more than 19 digits, we prevent
+//        // their change, leaving the text field in  its previous state.
+//        // While 16 digits is usual, credit card numbers have a hard
+//        // maximum of 19 digits defined by ISO standard 7812-1 in section
+//        // 3.8 and elsewhere. Applying this hard maximum here rather than
+//        // a maximum of 16 ensures that users with unusual card numbers
+//        // will still be able to enter their card number even if the
+//        // resultant formatting is odd.
+//        [textField setText:_previousTextFieldContent];
+//        textField.selectedTextRange = _previousSelection;
+//        return;
+//    }
+    
+    NSString *cardNumberWithSpaces = nil;
+    
+    if (_cardTypeStatus == cardTypeUnknown){
+        if ([cardNumberWithoutSpaces length] > 6){
+            [textField setText:_previousTextFieldContent];
+            textField.selectedTextRange = _previousSelection;
+            return;
+        }
+        
+        cardNumberWithSpaces = cardNumberWithoutSpaces;
+        
+    } else if (_cardTypeStatus == cardTypeAmericanExpress){
+        
+        if ([cardNumberWithoutSpaces length] > 15){
+            [textField setText:_previousTextFieldContent];
+            textField.selectedTextRange = _previousSelection;
+            return;
+        }
+        
+        cardNumberWithSpaces =
+        [self insertSpacesAmexStyleForString:cardNumberWithoutSpaces
+                   andPreserveCursorPosition:&targetCursorPosition];
+     
+    } else {
+        
+        if ([cardNumberWithoutSpaces length] > 16){
+            [textField setText:_previousTextFieldContent];
+            textField.selectedTextRange = _previousSelection;
+            return;
+        }
+        
+        cardNumberWithSpaces =
+        [self insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces
+                          andPreserveCursorPosition:&targetCursorPosition];
     }
     
-    NSString *cardNumberWithSpaces =
-    [self insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces
-                      andPreserveCursorPosition:&targetCursorPosition];
     
     textField.text = cardNumberWithSpaces;
     UITextPosition *targetPosition =
@@ -268,6 +319,71 @@ andPreserveCursorPosition:&targetCursorPosition];
      [textField textRangeFromPosition:targetPosition
                            toPosition:targetPosition]
      ];
+}
+
+
+-(void)checkCardTypeForString:(NSString*)str{
+    
+    NSLog(@"str: %@", str);
+    
+    int ccValue = 0;
+    
+    switch (str.length) {
+        case 1:
+        {
+            ccValue = [[NSString stringWithFormat:@"%c", [str characterAtIndex:0]] intValue];
+            _cardTypeStatus = (ccValue == 4) ? cardTypeVisa : cardTypeUnknown;
+        }
+            break;
+        case 2:
+        {
+            ccValue = [[str substringToIndex:2] intValue];
+            
+            if ((ccValue == 34) || (ccValue == 37)){
+                _cardTypeStatus = cardTypeAmericanExpress;
+            } else if ((NSLocationInRange([[str substringToIndex:2] intValue], NSMakeRange(51, (55-51))))){
+                _cardTypeStatus = cardTypeMasterCard;
+            } else if (ccValue == 65){
+                _cardTypeStatus = cardTypeDiscover;
+            }
+            
+        }
+            break;
+            
+        case 3:
+        {
+            ccValue = [[str substringToIndex:3] intValue];
+            
+            _cardTypeStatus = (NSLocationInRange(ccValue, NSMakeRange(644, (649-644)))) ? cardTypeDiscover : _cardTypeStatus;
+        }
+            break;
+            
+        case 4:
+        {
+            ccValue = [[str substringToIndex:4] intValue];
+
+            if ((NSLocationInRange(ccValue, NSMakeRange(3528, (3589-3528))))){
+                _cardTypeStatus = cardTypeJCL;
+            } else if (ccValue == 6011){
+                _cardTypeStatus = cardTypeDiscover;
+            }
+            
+        }
+            
+            break;
+            
+        case 6:
+        {
+            if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-5352622126))))){
+                _cardTypeStatus = cardTypeDiscover;
+            }
+            break;
+        }
+        default:
+            break;
+    }
+        
+    
 }
 
 -(BOOL)textField:(UITextField *)textField
@@ -346,6 +462,31 @@ replacementString:(NSString *)string
     
     return stringWithAddedSpaces;
 }
+
+
+- (NSString *)insertSpacesAmexStyleForString:(NSString *)string
+                          andPreserveCursorPosition:(NSUInteger *)cursorPosition
+{
+    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
+    NSUInteger cursorPositionInSpacelessString = *cursorPosition;
+    for (NSUInteger i=0; i<[string length]; i++) {
+        if (((i>0) && (i == 4) && ((i % 4) == 0)) || ((i>0) && (i==10) && (i%10) == 0)) {
+            [stringWithAddedSpaces appendString:@" "];
+            if (i < cursorPositionInSpacelessString) {
+                (*cursorPosition)++;
+            }
+        }
+        unichar characterToAdd = [string characterAtIndex:i];
+        NSString *stringToAdd =
+        [NSString stringWithCharacters:&characterToAdd length:1];
+        
+        [stringWithAddedSpaces appendString:stringToAdd];
+    }
+    
+    return stringWithAddedSpaces;
+}
+
+
 
 
 
