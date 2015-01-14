@@ -141,9 +141,9 @@
 			isa = PBXGroup;
 			children = (
 				5AEA23501A6657B200865999 /* Categories */,
-				5AEA234B1A6643B200865999 /* FXBlurView.m */,
 				5AEA23511A6657D900865999 /* Assets */,
 				5AEA234A1A6643B200865999 /* FXBlurView.h */,
+				5AEA234B1A6643B200865999 /* FXBlurView.m */,
 				5A927A3D1A6628AC00790A5F /* AppDelegate.h */,
 				5A927A3E1A6628AC00790A5F /* AppDelegate.m */,
 				5A927A401A6628AC00790A5F /* ViewController.h */,

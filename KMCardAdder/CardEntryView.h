@@ -8,6 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@interface CardEntryView : UIView
+@interface CardEntryView : UIView <UITextFieldDelegate>
+
+-(instancetype)initWithFrame:(CGRect)frame;
 
 @end

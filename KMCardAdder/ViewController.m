@@ -9,6 +9,7 @@
 #import "ViewController.h"
 #import "UIColor+VenmoColors.h"
 #import "UIImage+BlurredView.h"
+#import "CardEntryView.h"
 
 typedef void (^BlurCompletionBlock)(void);
 
@@ -28,9 +29,16 @@ typedef void (^BlurCompletionBlock)(void);
     [super viewDidLoad];
 
 
-    [self setupvView];
+    [self test];
     
 
+}
+
+-(void)test{
+    
+    CardEntryView *view = [[CardEntryView alloc] initWithFrame:CGRectMake(0, 80, self.view.frame.size.width, 40)];
+    [self.view addSubview:view];
+    
 }
 
 
