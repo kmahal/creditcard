@@ -17,6 +17,23 @@
 		5A927A651A662CC800790A5F /* UIColor+VenmoColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */; };
 		5AEA23491A66438C00865999 /* UIImage+BlurredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA23481A66438C00865999 /* UIImage+BlurredView.m */; };
 		5AEA234C1A6643B200865999 /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA234B1A6643B200865999 /* FXBlurView.m */; };
+		5AEA234F1A66562E00865999 /* CardEntryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA234E1A66562E00865999 /* CardEntryView.m */; };
+		5AEA23621A6657E900865999 /* Amex.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23521A6657E900865999 /* Amex.png */; };
+		5AEA23631A6657E900865999 /* Amex@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23531A6657E900865999 /* Amex@2x.png */; };
+		5AEA23641A6657E900865999 /* AmexCVV.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23541A6657E900865999 /* AmexCVV.png */; };
+		5AEA23651A6657E900865999 /* AmexCVV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23551A6657E900865999 /* AmexCVV@2x.png */; };
+		5AEA23661A6657E900865999 /* CVV.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23561A6657E900865999 /* CVV.png */; };
+		5AEA23671A6657E900865999 /* CVV@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23571A6657E900865999 /* CVV@2x.png */; };
+		5AEA23681A6657E900865999 /* Discover.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23581A6657E900865999 /* Discover.png */; };
+		5AEA23691A6657E900865999 /* Discover@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23591A6657E900865999 /* Discover@2x.png */; };
+		5AEA236A1A6657E900865999 /* GenericCard.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235A1A6657E900865999 /* GenericCard.png */; };
+		5AEA236B1A6657E900865999 /* GenericCard@2X.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235B1A6657E900865999 /* GenericCard@2X.png */; };
+		5AEA236C1A6657E900865999 /* JCB.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235C1A6657E900865999 /* JCB.png */; };
+		5AEA236D1A6657E900865999 /* JCB@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235D1A6657E900865999 /* JCB@2x.png */; };
+		5AEA236E1A6657E900865999 /* Mastercard.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235E1A6657E900865999 /* Mastercard.png */; };
+		5AEA236F1A6657E900865999 /* Mastercard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235F1A6657E900865999 /* Mastercard@2x.png */; };
+		5AEA23701A6657E900865999 /* Visa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23601A6657E900865999 /* Visa.png */; };
+		5AEA23711A6657E900865999 /* Visa@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23611A6657E900865999 /* Visa@2x.png */; };
 		6556604FAC0B606DE5801D63 /* libPods-KMCardAdder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C06AA2CA4F2C2F9ECEF105 /* libPods-KMCardAdder.a */; };
 /* End PBXBuildFile section */
 
@@ -44,12 +61,30 @@
 		5A927A4F1A6628AC00790A5F /* KMCardAdderTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KMCardAdderTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A927A541A6628AC00790A5F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5A927A551A6628AC00790A5F /* KMCardAdderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KMCardAdderTests.m; sourceTree = "<group>"; };
-		5A927A631A662CC800790A5F /* UIColor+VenmoColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+VenmoColors.h"; sourceTree = "<group>"; };
-		5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+VenmoColors.m"; sourceTree = "<group>"; };
+		5A927A631A662CC800790A5F /* UIColor+VenmoColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+VenmoColors.h"; path = "../UIColor+VenmoColors.h"; sourceTree = "<group>"; };
+		5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+VenmoColors.m"; path = "../UIColor+VenmoColors.m"; sourceTree = "<group>"; };
 		5AEA23471A66438C00865999 /* UIImage+BlurredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurredView.h"; sourceTree = "<group>"; };
 		5AEA23481A66438C00865999 /* UIImage+BlurredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurredView.m"; sourceTree = "<group>"; };
 		5AEA234A1A6643B200865999 /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
 		5AEA234B1A6643B200865999 /* FXBlurView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FXBlurView.m; sourceTree = "<group>"; };
+		5AEA234D1A66562E00865999 /* CardEntryView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CardEntryView.h; sourceTree = "<group>"; };
+		5AEA234E1A66562E00865999 /* CardEntryView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CardEntryView.m; sourceTree = "<group>"; };
+		5AEA23521A6657E900865999 /* Amex.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Amex.png; sourceTree = "<group>"; };
+		5AEA23531A6657E900865999 /* Amex@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Amex@2x.png"; sourceTree = "<group>"; };
+		5AEA23541A6657E900865999 /* AmexCVV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = AmexCVV.png; sourceTree = "<group>"; };
+		5AEA23551A6657E900865999 /* AmexCVV@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "AmexCVV@2x.png"; sourceTree = "<group>"; };
+		5AEA23561A6657E900865999 /* CVV.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = CVV.png; sourceTree = "<group>"; };
+		5AEA23571A6657E900865999 /* CVV@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "CVV@2x.png"; sourceTree = "<group>"; };
+		5AEA23581A6657E900865999 /* Discover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Discover.png; sourceTree = "<group>"; };
+		5AEA23591A6657E900865999 /* Discover@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Discover@2x.png"; sourceTree = "<group>"; };
+		5AEA235A1A6657E900865999 /* GenericCard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = GenericCard.png; sourceTree = "<group>"; };
+		5AEA235B1A6657E900865999 /* GenericCard@2X.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "GenericCard@2X.png"; sourceTree = "<group>"; };
+		5AEA235C1A6657E900865999 /* JCB.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = JCB.png; sourceTree = "<group>"; };
+		5AEA235D1A6657E900865999 /* JCB@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "JCB@2x.png"; sourceTree = "<group>"; };
+		5AEA235E1A6657E900865999 /* Mastercard.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Mastercard.png; sourceTree = "<group>"; };
+		5AEA235F1A6657E900865999 /* Mastercard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mastercard@2x.png"; sourceTree = "<group>"; };
+		5AEA23601A6657E900865999 /* Visa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Visa.png; sourceTree = "<group>"; };
+		5AEA23611A6657E900865999 /* Visa@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Visa@2x.png"; sourceTree = "<group>"; };
 		86C06AA2CA4F2C2F9ECEF105 /* libPods-KMCardAdder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KMCardAdder.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E780982B77F5E21E16EB6EA /* Pods-KMCardAdder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KMCardAdder.release.xcconfig"; path = "Pods/Target Support Files/Pods-KMCardAdder/Pods-KMCardAdder.release.xcconfig"; sourceTree = "<group>"; };
 		FA68916750405033C58897E4 /* Pods-KMCardAdder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KMCardAdder.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KMCardAdder/Pods-KMCardAdder.debug.xcconfig"; sourceTree = "<group>"; };
@@ -85,8 +120,6 @@
 		5A927A2D1A6628AC00790A5F = {
 			isa = PBXGroup;
 			children = (
-				5A927A631A662CC800790A5F /* UIColor+VenmoColors.h */,
-				5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */,
 				5A927A381A6628AC00790A5F /* KMCardAdder */,
 				5A927A521A6628AC00790A5F /* KMCardAdderTests */,
 				5A927A371A6628AC00790A5F /* Products */,
@@ -107,14 +140,16 @@
 		5A927A381A6628AC00790A5F /* KMCardAdder */ = {
 			isa = PBXGroup;
 			children = (
-				5AEA234A1A6643B200865999 /* FXBlurView.h */,
+				5AEA23501A6657B200865999 /* Categories */,
 				5AEA234B1A6643B200865999 /* FXBlurView.m */,
+				5AEA23511A6657D900865999 /* Assets */,
+				5AEA234A1A6643B200865999 /* FXBlurView.h */,
 				5A927A3D1A6628AC00790A5F /* AppDelegate.h */,
 				5A927A3E1A6628AC00790A5F /* AppDelegate.m */,
 				5A927A401A6628AC00790A5F /* ViewController.h */,
 				5A927A411A6628AC00790A5F /* ViewController.m */,
-				5AEA23471A66438C00865999 /* UIImage+BlurredView.h */,
-				5AEA23481A66438C00865999 /* UIImage+BlurredView.m */,
+				5AEA234D1A66562E00865999 /* CardEntryView.h */,
+				5AEA234E1A66562E00865999 /* CardEntryView.m */,
 				5A927A431A6628AC00790A5F /* Main.storyboard */,
 				5A927A461A6628AC00790A5F /* Images.xcassets */,
 				5A927A481A6628AC00790A5F /* LaunchScreen.xib */,
@@ -147,6 +182,40 @@
 				5A927A541A6628AC00790A5F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5AEA23501A6657B200865999 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				5A927A631A662CC800790A5F /* UIColor+VenmoColors.h */,
+				5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */,
+				5AEA23471A66438C00865999 /* UIImage+BlurredView.h */,
+				5AEA23481A66438C00865999 /* UIImage+BlurredView.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		5AEA23511A6657D900865999 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				5AEA23521A6657E900865999 /* Amex.png */,
+				5AEA23531A6657E900865999 /* Amex@2x.png */,
+				5AEA23541A6657E900865999 /* AmexCVV.png */,
+				5AEA23551A6657E900865999 /* AmexCVV@2x.png */,
+				5AEA23561A6657E900865999 /* CVV.png */,
+				5AEA23571A6657E900865999 /* CVV@2x.png */,
+				5AEA23581A6657E900865999 /* Discover.png */,
+				5AEA23591A6657E900865999 /* Discover@2x.png */,
+				5AEA235A1A6657E900865999 /* GenericCard.png */,
+				5AEA235B1A6657E900865999 /* GenericCard@2X.png */,
+				5AEA235C1A6657E900865999 /* JCB.png */,
+				5AEA235D1A6657E900865999 /* JCB@2x.png */,
+				5AEA235E1A6657E900865999 /* Mastercard.png */,
+				5AEA235F1A6657E900865999 /* Mastercard@2x.png */,
+				5AEA23601A6657E900865999 /* Visa.png */,
+				5AEA23611A6657E900865999 /* Visa@2x.png */,
+			);
+			name = Assets;
 			sourceTree = "<group>";
 		};
 		C3611F3FFD858E9A6F45AC62 /* Pods */ = {
@@ -240,9 +309,25 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5AEA23701A6657E900865999 /* Visa.png in Resources */,
+				5AEA23671A6657E900865999 /* CVV@2x.png in Resources */,
+				5AEA23691A6657E900865999 /* Discover@2x.png in Resources */,
 				5A927A451A6628AC00790A5F /* Main.storyboard in Resources */,
+				5AEA23681A6657E900865999 /* Discover.png in Resources */,
+				5AEA236B1A6657E900865999 /* GenericCard@2X.png in Resources */,
+				5AEA23661A6657E900865999 /* CVV.png in Resources */,
+				5AEA23711A6657E900865999 /* Visa@2x.png in Resources */,
+				5AEA23651A6657E900865999 /* AmexCVV@2x.png in Resources */,
+				5AEA236E1A6657E900865999 /* Mastercard.png in Resources */,
+				5AEA23631A6657E900865999 /* Amex@2x.png in Resources */,
 				5A927A4A1A6628AC00790A5F /* LaunchScreen.xib in Resources */,
+				5AEA236F1A6657E900865999 /* Mastercard@2x.png in Resources */,
+				5AEA23621A6657E900865999 /* Amex.png in Resources */,
+				5AEA236A1A6657E900865999 /* GenericCard.png in Resources */,
+				5AEA236C1A6657E900865999 /* JCB.png in Resources */,
+				5AEA23641A6657E900865999 /* AmexCVV.png in Resources */,
 				5A927A471A6628AC00790A5F /* Images.xcassets in Resources */,
+				5AEA236D1A6657E900865999 /* JCB@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -296,6 +381,7 @@
 				5A927A421A6628AC00790A5F /* ViewController.m in Sources */,
 				5A927A3F1A6628AC00790A5F /* AppDelegate.m in Sources */,
 				5AEA23491A66438C00865999 /* UIImage+BlurredView.m in Sources */,
+				5AEA234F1A66562E00865999 /* CardEntryView.m in Sources */,
 				5A927A3C1A6628AC00790A5F /* main.m in Sources */,
 				5A927A651A662CC800790A5F /* UIColor+VenmoColors.m in Sources */,
 				5AEA234C1A6643B200865999 /* FXBlurView.m in Sources */,
