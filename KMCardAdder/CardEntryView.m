@@ -18,6 +18,8 @@ typedef enum {
 }CardType;
 
 #import "CardEntryView.h"
+#import "NSArray+Reverse.h"
+#import "NSString+CardValidation.h"
 
 @interface CardEntryView()
 
@@ -26,6 +28,12 @@ typedef enum {
 @property (strong, nonatomic) UITextField *textField3;
 @property (strong, nonatomic) UIImageView *creditCardImageView;
 @property (nonatomic) CardType cardTypeStatus;
+
+@property (strong, nonatomic) NSLayoutConstraint *constraint_tf1_initial;
+@property (strong, nonatomic) NSLayoutConstraint *constraint_tf1_completed;
+
+
+@property (strong, nonatomic) UIView *cardContainerView;
 
 @property (strong, nonatomic) NSString *previousTextFieldContent;
 @property (strong, nonatomic) UITextRange *previousSelection;
@@ -37,90 +45,13 @@ typedef enum {
 
 
 
--(instancetype)initWithFrame:(CGRect)frame{
+
+-(instancetype)init{
     
-    self = [super initWithFrame:frame];
+    self = [super init];
     
     if (self){
-        
-        [self addObserver:self forKeyPath:@"cardTypeStatus" options:NSKeyValueObservingOptionNew context:nil];
-
-        
-        _cardTypeStatus = cardTypeUnknown;
-        
-        UIView *containerView1 = [[UIView alloc] init];
-        [containerView1 setBackgroundColor:[UIColor redColor]];
-        containerView1.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        [self addSubview:containerView1];
-        
-        NSArray *array1 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[cv]" options:0 metrics:nil views:@{@"cv": containerView1}];
-        
-        NSArray *array2 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[cv]" options:0 metrics:nil views:@{@"cv": containerView1}];
-        
-        NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:containerView1 attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.0f constant:0];
-        
-        NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:containerView1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.1f constant:0];
-        
-        
-        [self addConstraints:@[constraint1, constraint2]];
-        [self addConstraints:array1];
-        [self addConstraints:array2];
-        
-        _creditCardImageView = [[UIImageView alloc] init];
-        _creditCardImageView.image = [self imageForCardStatus];
-        _creditCardImageView.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        [containerView1 addSubview:_creditCardImageView];
-        
-        NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant:_creditCardImageView.image.size.height];
-        
-       NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:0.0f constant:_creditCardImageView.image.size.width];
-        
-        NSLayoutConstraint *constraint5 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:containerView1 attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
-        
-        NSLayoutConstraint *constraint6 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:containerView1 attribute:NSLayoutAttributeBottom multiplier:0.5f constant:0];
-        
-        [containerView1 addConstraints:@[constraint3, constraint4]];
-        
-        [containerView1 addConstraints:@[constraint5, constraint6]];
-        
-        _textField1 = [[UITextField alloc] init];
-        
-        _textField1.placeholder = @"1234 5678 9760 2892";
-        _textField1.backgroundColor = [UIColor whiteColor];
-        _textField1.delegate = self;
-        
-        _textField1.translatesAutoresizingMaskIntoConstraints = NO;
-        
-        [_textField1 setKeyboardType:UIKeyboardTypeNumberPad];
-        
-        
-        [self addSubview:_textField1];
-        
-        self.backgroundColor = [UIColor grayColor];
-        
-        NSLayoutConstraint *constraint1tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:containerView1 attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
-        
-        NSLayoutConstraint *constraint4tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.5f constant:0];
-        
-        NSLayoutConstraint *constraint2tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
-        
-        NSLayoutConstraint *constraint3tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
-        
-        [self addConstraint:constraint1tf];
-        [self addConstraint:constraint4tf];
-        [self addConstraint:constraint2tf];
-        [self addConstraint:constraint3tf];
-
-       // [self setupSecondTF];
-       // [self setupThirdtf];
-        
-        [_textField1 addTarget:self
-                        action:@selector(reformatAsCardNumber:)
-              forControlEvents:UIControlEventEditingChanged];
-        
-        
+        [self initialSetup];
     }
     
     return self;
@@ -128,11 +59,112 @@ typedef enum {
 }
 
 
--(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+
+-(void)initialSetup{
     
-    if ([keyPath isEqualToString:@"cardTypeStatus"]){
-        
+    _cardTypeStatus = cardTypeUnknown;
+    
+    _cardContainerView = [[UIView alloc] init];
+    [_cardContainerView setBackgroundColor:[UIColor redColor]];
+    _cardContainerView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [self addSubview:_cardContainerView];
+    
+    NSArray *array1 = [NSLayoutConstraint constraintsWithVisualFormat:@"V:|[cv]" options:0 metrics:nil views:@{@"cv": _cardContainerView}];
+    
+    NSArray *array2 = [NSLayoutConstraint constraintsWithVisualFormat:@"H:|[cv]" options:0 metrics:nil views:@{@"cv": _cardContainerView}];
+    
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:_cardContainerView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeHeight multiplier:1.0f constant:0];
+    
+    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:_cardContainerView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.1f constant:0];
+    
+    
+    [self addConstraints:@[constraint1, constraint2]];
+    [self addConstraints:array1];
+    [self addConstraints:array2];
+    
+    _creditCardImageView = [[UIImageView alloc] init];
+    _creditCardImageView.image = [self imageForCardStatus];
+    _creditCardImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [_cardContainerView addSubview:_creditCardImageView];
+    
+    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeHeight multiplier:1.0f constant:_creditCardImageView.image.size.height];
+    
+    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:nil attribute:NSLayoutAttributeWidth multiplier:0.0f constant:_creditCardImageView.image.size.width];
+    
+    NSLayoutConstraint *constraint5 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
+    
+    NSLayoutConstraint *constraint6 = [NSLayoutConstraint constraintWithItem:_creditCardImageView attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeBottom multiplier:0.5f constant:0];
+    
+    [_cardContainerView addConstraints:@[constraint3, constraint4]];
+    
+    [_cardContainerView addConstraints:@[constraint5, constraint6]];
+    
+    
+    [self setupSecondTF];
+    _textField2.alpha = 0.0f;
+    
+    [self setupThirdtf];
+    
+    _textField3.alpha = 0.0f;
+    
+    [self setupTextField1WithContainerView:_cardContainerView];
+    
+    
+    
+}
+
+
+-(void)textField1BecameActive:(UITextField*)textfield{
+    
+    NSLog(@"hit notification");
+    
+    if (textfield.text.length >0){
+        [self animateTextField1Closed:NO];
     }
+    
+}
+
+
+-(void)setupTextField1WithContainerView:(UIView*)containerView1{
+    
+    _textField1 = [[UITextField alloc] init];
+    
+    _textField1.placeholder = @"1234 5678 9760 2892";
+    _textField1.backgroundColor = [UIColor whiteColor];
+    _textField1.delegate = self;
+    
+    _textField1.translatesAutoresizingMaskIntoConstraints = NO;
+    
+    [_textField1 setKeyboardType:UIKeyboardTypeNumberPad];
+    
+    
+    [self addSubview:_textField1];
+    
+    self.backgroundColor = [UIColor grayColor];
+    
+    _constraint_tf1_initial = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:containerView1 attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
+    
+    NSLayoutConstraint *constraint4tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.5f constant:0];
+    
+    NSLayoutConstraint *constraint2tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    
+    NSLayoutConstraint *constraint3tf = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
+    
+     _constraint_tf1_completed = [NSLayoutConstraint constraintWithItem:_textField1 attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:60];
+    
+    [self addConstraint:_constraint_tf1_initial];
+    [self addConstraint:constraint4tf];
+    [self addConstraint:constraint2tf];
+    [self addConstraint:constraint3tf];
+    
+    [_textField1 addTarget:self
+                    action:@selector(reformatAsCardNumber:)
+          forControlEvents:UIControlEventEditingChanged];
+    
+    [_textField1 addTarget:self action:@selector(textField1BecameActive:) forControlEvents:UIControlEventEditingDidBegin];
+    
     
 }
 
@@ -194,7 +226,6 @@ typedef enum {
     
     NSLayoutConstraint *constraint1tf = [NSLayoutConstraint constraintWithItem:_textField3 attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.2f constant:0];
     
-    
     NSLayoutConstraint *constraint4tf = [NSLayoutConstraint constraintWithItem:_textField3 attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:0.8f constant:0];
     
     NSLayoutConstraint *constraint2tf = [NSLayoutConstraint constraintWithItem:_textField3 attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
@@ -205,6 +236,7 @@ typedef enum {
     [self addConstraint:constraint4tf];
     [self addConstraint:constraint2tf];
     [self addConstraint:constraint3tf];
+    
 
     
     
@@ -251,9 +283,7 @@ typedef enum {
     [textField offsetFromPosition:textField.beginningOfDocument
                        toPosition:textField.selectedTextRange.start];
     
-    NSString *cardNumberWithoutSpaces =
-    [self removeNonDigits:textField.text
-andPreserveCursorPosition:&targetCursorPosition];
+    NSString *cardNumberWithoutSpaces = [NSString removeNonDigits:textField.text andPreserveCursorPosition:&targetCursorPosition];
     
     [self checkCardTypeForString:cardNumberWithoutSpaces];
     
@@ -289,24 +319,27 @@ andPreserveCursorPosition:&targetCursorPosition];
         if ([cardNumberWithoutSpaces length] > 15){
             [textField setText:_previousTextFieldContent];
             textField.selectedTextRange = _previousSelection;
+            
+            [self animateTextField1Closed:YES];
             return;
         }
         
-        cardNumberWithSpaces =
-        [self insertSpacesAmexStyleForString:cardNumberWithoutSpaces
-                   andPreserveCursorPosition:&targetCursorPosition];
+        cardNumberWithSpaces = [NSString insertSpacesAmexStyleForString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+
      
     } else {
         
         if ([cardNumberWithoutSpaces length] > 16){
             [textField setText:_previousTextFieldContent];
             textField.selectedTextRange = _previousSelection;
+            
+            [self animateTextField1Closed:YES];
+
             return;
         }
         
-        cardNumberWithSpaces =
-        [self insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces
-                          andPreserveCursorPosition:&targetCursorPosition];
+        cardNumberWithSpaces = [NSString insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+       
     }
     
     
@@ -319,6 +352,41 @@ andPreserveCursorPosition:&targetCursorPosition];
      [textField textRangeFromPosition:targetPosition
                            toPosition:targetPosition]
      ];
+}
+
+
+-(void)animateTextField1Closed:(BOOL)close{
+    
+    [self bringSubviewToFront:_cardContainerView];
+
+    
+    NSLayoutConstraint *constraintToRemove = close ? _constraint_tf1_initial : _constraint_tf1_completed;
+    
+    NSLayoutConstraint *constraintToAdd = close ? _constraint_tf1_completed : _constraint_tf1_initial;
+    
+    [self removeConstraint:constraintToRemove];
+    
+//    UITextPosition *Pos2 = [_textField1 positionFromPosition: _textField1.endOfDocument offset: 0];
+//    UITextPosition *Pos1 = [_textField1 positionFromPosition: _textField1.endOfDocument offset: -5];
+//    
+//    UITextRange *range = [_textField1 textRangeFromPosition:Pos1 toPosition:Pos2];
+//    
+//    CGRect result1 = [_textField1 firstRectForRange:(UITextRange *)range ];
+//
+//    _constraint_tf1_completed.constant = result1.size.width;
+    
+    [self addConstraint:constraintToAdd];
+    
+    float value = close ? 1.0f : 0.0f;
+    
+    [UIView animateWithDuration:0.5f animations:^{
+        [self layoutIfNeeded];
+        _textField2.alpha = value;
+        _textField3.alpha = value;
+        
+    }];
+    
+    
 }
 
 
@@ -374,7 +442,9 @@ andPreserveCursorPosition:&targetCursorPosition];
             
         case 6:
         {
-            if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-5352622126))))){
+            ccValue = [[str substringToIndex:6] intValue];
+            
+            if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-622126))))){
                 _cardTypeStatus = cardTypeDiscover;
             }
             break;
@@ -382,7 +452,43 @@ andPreserveCursorPosition:&targetCursorPosition];
         default:
             break;
     }
+    
+    
+}
+
+
+-(BOOL)doesPassLuhnAlgorithm:(NSString*)str{
+    
+    NSArray *arrayOfValues = [str componentsSeparatedByString:@""];
+    
+    arrayOfValues = [arrayOfValues reversedArray];
+    
+    int sum = 0;
+    
+    for (int i =0; i <arrayOfValues.count; i++){
         
+        int value = [[arrayOfValues objectAtIndex:i] intValue];
+
+        if (i %2 != 0){
+            
+            value = value*2;
+            
+            if (value/10 == 1){
+                value = 1 + (value %10);
+            }
+            
+        }
+        
+        sum = sum + value;
+        
+    }
+    
+    if (sum %10 == 0){
+        return YES;
+    } else {
+        return NO;
+    }
+    
     
 }
 
@@ -403,92 +509,6 @@ replacementString:(NSString *)string
 
     
 }
-
-/*
- Removes non-digits from the string, decrementing `cursorPosition` as
- appropriate so that, for instance, if we pass in `@"1111 1123 1111"`
- and a cursor position of `8`, the cursor position will be changed to
- `7` (keeping it between the '2' and the '3' after the spaces are removed).
- */
-- (NSString *)removeNonDigits:(NSString *)string
-    andPreserveCursorPosition:(NSUInteger *)cursorPosition
-{
-    NSUInteger originalCursorPosition = *cursorPosition;
-    NSMutableString *digitsOnlyString = [NSMutableString new];
-    for (NSUInteger i=0; i<[string length]; i++) {
-        unichar characterToAdd = [string characterAtIndex:i];
-        if (isdigit(characterToAdd)) {
-            NSString *stringToAdd =
-            [NSString stringWithCharacters:&characterToAdd
-                                    length:1];
-            
-            [digitsOnlyString appendString:stringToAdd];
-        }
-        else {
-            if (i < originalCursorPosition) {
-                (*cursorPosition)--;
-            }
-        }
-    }
-    
-    return digitsOnlyString;
-}
-
-/*
- Inserts spaces into the string to format it as a credit card number,
- incrementing `cursorPosition` as appropriate so that, for instance, if we
- pass in `@"111111231111"` and a cursor position of `7`, the cursor position
- will be changed to `8` (keeping it between the '2' and the '3' after the
- spaces are added).
- */
-- (NSString *)insertSpacesEveryFourDigitsIntoString:(NSString *)string
-                          andPreserveCursorPosition:(NSUInteger *)cursorPosition
-{
-    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
-    NSUInteger cursorPositionInSpacelessString = *cursorPosition;
-    for (NSUInteger i=0; i<[string length]; i++) {
-        if ((i>0) && ((i % 4) == 0)) {
-            [stringWithAddedSpaces appendString:@" "];
-            if (i < cursorPositionInSpacelessString) {
-                (*cursorPosition)++;
-            }
-        }
-        unichar characterToAdd = [string characterAtIndex:i];
-        NSString *stringToAdd =
-        [NSString stringWithCharacters:&characterToAdd length:1];
-        
-        [stringWithAddedSpaces appendString:stringToAdd];
-    }
-    
-    return stringWithAddedSpaces;
-}
-
-
-- (NSString *)insertSpacesAmexStyleForString:(NSString *)string
-                          andPreserveCursorPosition:(NSUInteger *)cursorPosition
-{
-    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
-    NSUInteger cursorPositionInSpacelessString = *cursorPosition;
-    for (NSUInteger i=0; i<[string length]; i++) {
-        if (((i>0) && (i == 4) && ((i % 4) == 0)) || ((i>0) && (i==10) && (i%10) == 0)) {
-            [stringWithAddedSpaces appendString:@" "];
-            if (i < cursorPositionInSpacelessString) {
-                (*cursorPosition)++;
-            }
-        }
-        unichar characterToAdd = [string characterAtIndex:i];
-        NSString *stringToAdd =
-        [NSString stringWithCharacters:&characterToAdd length:1];
-        
-        [stringWithAddedSpaces appendString:stringToAdd];
-    }
-    
-    return stringWithAddedSpaces;
-}
-
-
-
-
 
 
 

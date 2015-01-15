@@ -34,6 +34,8 @@
 		5AEA236F1A6657E900865999 /* Mastercard@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA235F1A6657E900865999 /* Mastercard@2x.png */; };
 		5AEA23701A6657E900865999 /* Visa.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23601A6657E900865999 /* Visa.png */; };
 		5AEA23711A6657E900865999 /* Visa@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 5AEA23611A6657E900865999 /* Visa@2x.png */; };
+		5AEA23741A67146F00865999 /* NSArray+Reverse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA23731A67146F00865999 /* NSArray+Reverse.m */; };
+		5AEA23861A67898B00865999 /* NSString+CardValidation.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA23851A67898B00865999 /* NSString+CardValidation.m */; };
 		6556604FAC0B606DE5801D63 /* libPods-KMCardAdder.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 86C06AA2CA4F2C2F9ECEF105 /* libPods-KMCardAdder.a */; };
 /* End PBXBuildFile section */
 
@@ -85,6 +87,10 @@
 		5AEA235F1A6657E900865999 /* Mastercard@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Mastercard@2x.png"; sourceTree = "<group>"; };
 		5AEA23601A6657E900865999 /* Visa.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Visa.png; sourceTree = "<group>"; };
 		5AEA23611A6657E900865999 /* Visa@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Visa@2x.png"; sourceTree = "<group>"; };
+		5AEA23721A67146F00865999 /* NSArray+Reverse.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+Reverse.h"; sourceTree = "<group>"; };
+		5AEA23731A67146F00865999 /* NSArray+Reverse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+Reverse.m"; sourceTree = "<group>"; };
+		5AEA23841A67898B00865999 /* NSString+CardValidation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSString+CardValidation.h"; sourceTree = "<group>"; };
+		5AEA23851A67898B00865999 /* NSString+CardValidation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSString+CardValidation.m"; sourceTree = "<group>"; };
 		86C06AA2CA4F2C2F9ECEF105 /* libPods-KMCardAdder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-KMCardAdder.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		9E780982B77F5E21E16EB6EA /* Pods-KMCardAdder.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KMCardAdder.release.xcconfig"; path = "Pods/Target Support Files/Pods-KMCardAdder/Pods-KMCardAdder.release.xcconfig"; sourceTree = "<group>"; };
 		FA68916750405033C58897E4 /* Pods-KMCardAdder.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-KMCardAdder.debug.xcconfig"; path = "Pods/Target Support Files/Pods-KMCardAdder/Pods-KMCardAdder.debug.xcconfig"; sourceTree = "<group>"; };
@@ -191,6 +197,10 @@
 				5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */,
 				5AEA23471A66438C00865999 /* UIImage+BlurredView.h */,
 				5AEA23481A66438C00865999 /* UIImage+BlurredView.m */,
+				5AEA23721A67146F00865999 /* NSArray+Reverse.h */,
+				5AEA23731A67146F00865999 /* NSArray+Reverse.m */,
+				5AEA23841A67898B00865999 /* NSString+CardValidation.h */,
+				5AEA23851A67898B00865999 /* NSString+CardValidation.m */,
 			);
 			name = Categories;
 			sourceTree = "<group>";
@@ -381,6 +391,8 @@
 				5A927A421A6628AC00790A5F /* ViewController.m in Sources */,
 				5A927A3F1A6628AC00790A5F /* AppDelegate.m in Sources */,
 				5AEA23491A66438C00865999 /* UIImage+BlurredView.m in Sources */,
+				5AEA23741A67146F00865999 /* NSArray+Reverse.m in Sources */,
+				5AEA23861A67898B00865999 /* NSString+CardValidation.m in Sources */,
 				5AEA234F1A66562E00865999 /* CardEntryView.m in Sources */,
 				5A927A3C1A6628AC00790A5F /* main.m in Sources */,
 				5A927A651A662CC800790A5F /* UIColor+VenmoColors.m in Sources */,

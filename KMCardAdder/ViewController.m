@@ -36,8 +36,24 @@ typedef void (^BlurCompletionBlock)(void);
 
 -(void)test{
     
-    CardEntryView *view = [[CardEntryView alloc] initWithFrame:CGRectMake(0, 80, self.view.frame.size.width, 40)];
+    //CardEntryView *view = [[CardEntryView alloc] initWithFrame:CGRectMake(0, 80, self.view.frame.size.width, 40)];
+    
+    
+    CardEntryView *view = [[CardEntryView alloc] init];
+    view.translatesAutoresizingMaskIntoConstraints = NO;
+
     [self.view addSubview:view];
+    
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    
+    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0.0f constant:40];
+    
+    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
+    
+    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    
+    [self.view addConstraints:@[constraint1, constraint2, constraint3, constraint4]];
+    
     
 }
 
