@@ -10,6 +10,4 @@
 
 @interface CardEntryView : UIView <UITextFieldDelegate>
 
--(instancetype)initWithFrame:(CGRect)frame;
-
 @end

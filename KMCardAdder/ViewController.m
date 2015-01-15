@@ -29,14 +29,12 @@ typedef void (^BlurCompletionBlock)(void);
     [super viewDidLoad];
 
 
-    [self test];
+    [self setupvView];
     
 
 }
 
--(void)test{
-    
-    //CardEntryView *view = [[CardEntryView alloc] initWithFrame:CGRectMake(0, 80, self.view.frame.size.width, 40)];
+-(void)setupCardEntryView{
     
     
     CardEntryView *view = [[CardEntryView alloc] init];
@@ -71,29 +69,31 @@ typedef void (^BlurCompletionBlock)(void);
     
     self.title = @"Add A Card";
     
-    UITextField *textField = [[UITextField alloc] init];
-    
-    textField.placeholder = @"Enter Card #";
-    textField.backgroundColor = [UIColor whiteColor];
-    
-    textField.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [textField setKeyboardType:UIKeyboardTypeNumberPad];
-    
-    
-    [self.view addSubview:textField];
-    
+//    UITextField *textField = [[UITextField alloc] init];
+//    
+//    textField.placeholder = @"Enter Card #";
+//    textField.backgroundColor = [UIColor whiteColor];
+//    
+//    textField.translatesAutoresizingMaskIntoConstraints = NO;
+//    
+//    [textField setKeyboardType:UIKeyboardTypeNumberPad];
+//    
+//    
+//    [self.view addSubview:textField];
+//    
     self.view.backgroundColor = [UIColor venmoGray];
+//    
+//    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+//    
+//    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+//    
+//    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
+//    
+//    [self.view addConstraint:constraint1];
+//    [self.view addConstraint:constraint2];
+//    [self.view addConstraint:constraint3];
     
-    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
-    
-    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
-    
-    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
-    
-    [self.view addConstraint:constraint1];
-    [self.view addConstraint:constraint2];
-    [self.view addConstraint:constraint3];
+    [self setupCardEntryView];
     
 
     

@@ -20,4 +20,10 @@
 + (NSString *)removeNonDigits:(NSString *)string
     andPreserveCursorPosition:(NSUInteger *)cursorPosition;
 
+-(BOOL)doesPassLuhnAlgorithm;
+
++(NSString*) filteredDateStringFromString:(NSString*)string WithFilter:(NSString*)filter;
+
++(NSString*)validStringForExpirationDateStr:(NSString*)string;
+
 @end
