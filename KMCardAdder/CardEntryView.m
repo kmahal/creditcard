@@ -136,7 +136,7 @@ typedef enum {
     
     _constraint_tf1_initial = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
     
-    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.7f constant:0];
+    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.6f constant:0];
     
     NSLayoutConstraint *constraint_tf1_top = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
     
@@ -319,8 +319,10 @@ typedef enum {
     
     [self bringSubviewToFront:_cardContainerView];
     
+    NSInteger offset = (_cardTypeStatus == cardTypeAmericanExpress) ? -5 : -4;
+    
     UITextPosition *Pos2 = [_cardNumberTextField positionFromPosition: _cardNumberTextField.endOfDocument offset: 0];
-    UITextPosition *Pos1 = [_cardNumberTextField positionFromPosition: _cardNumberTextField.endOfDocument offset: -4];
+    UITextPosition *Pos1 = [_cardNumberTextField positionFromPosition: _cardNumberTextField.endOfDocument offset: offset];
     
     UITextRange *range = [_cardNumberTextField textRangeFromPosition:Pos1 toPosition:Pos2];
     
