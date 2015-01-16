@@ -15,6 +15,7 @@
 		5A927A4A1A6628AC00790A5F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 5A927A481A6628AC00790A5F /* LaunchScreen.xib */; };
 		5A927A561A6628AC00790A5F /* KMCardAdderTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A927A551A6628AC00790A5F /* KMCardAdderTests.m */; };
 		5A927A651A662CC800790A5F /* UIColor+VenmoColors.m in Sources */ = {isa = PBXBuildFile; fileRef = 5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */; };
+		5AA887471A68F2E1005E09A6 /* KMCardData.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AA887461A68F2E0005E09A6 /* KMCardData.m */; };
 		5AEA23491A66438C00865999 /* UIImage+BlurredView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA23481A66438C00865999 /* UIImage+BlurredView.m */; };
 		5AEA234C1A6643B200865999 /* FXBlurView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA234B1A6643B200865999 /* FXBlurView.m */; };
 		5AEA234F1A66562E00865999 /* CardEntryView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5AEA234E1A66562E00865999 /* CardEntryView.m */; };
@@ -65,6 +66,8 @@
 		5A927A551A6628AC00790A5F /* KMCardAdderTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = KMCardAdderTests.m; sourceTree = "<group>"; };
 		5A927A631A662CC800790A5F /* UIColor+VenmoColors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+VenmoColors.h"; path = "../UIColor+VenmoColors.h"; sourceTree = "<group>"; };
 		5A927A641A662CC800790A5F /* UIColor+VenmoColors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+VenmoColors.m"; path = "../UIColor+VenmoColors.m"; sourceTree = "<group>"; };
+		5AA887451A68F2E0005E09A6 /* KMCardData.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMCardData.h; sourceTree = "<group>"; };
+		5AA887461A68F2E0005E09A6 /* KMCardData.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMCardData.m; sourceTree = "<group>"; };
 		5AEA23471A66438C00865999 /* UIImage+BlurredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurredView.h"; sourceTree = "<group>"; };
 		5AEA23481A66438C00865999 /* UIImage+BlurredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurredView.m"; sourceTree = "<group>"; };
 		5AEA234A1A6643B200865999 /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
@@ -146,16 +149,16 @@
 		5A927A381A6628AC00790A5F /* KMCardAdder */ = {
 			isa = PBXGroup;
 			children = (
+				5AA887441A68F04C005E09A6 /* Custom Views */,
+				5AA887421A68F02F005E09A6 /* 3rd Party Libraries */,
 				5AEA23501A6657B200865999 /* Categories */,
 				5AEA23511A6657D900865999 /* Assets */,
-				5AEA234A1A6643B200865999 /* FXBlurView.h */,
-				5AEA234B1A6643B200865999 /* FXBlurView.m */,
 				5A927A3D1A6628AC00790A5F /* AppDelegate.h */,
 				5A927A3E1A6628AC00790A5F /* AppDelegate.m */,
+				5AA887451A68F2E0005E09A6 /* KMCardData.h */,
+				5AA887461A68F2E0005E09A6 /* KMCardData.m */,
 				5A927A401A6628AC00790A5F /* ViewController.h */,
 				5A927A411A6628AC00790A5F /* ViewController.m */,
-				5AEA234D1A66562E00865999 /* CardEntryView.h */,
-				5AEA234E1A66562E00865999 /* CardEntryView.m */,
 				5A927A431A6628AC00790A5F /* Main.storyboard */,
 				5A927A461A6628AC00790A5F /* Images.xcassets */,
 				5A927A481A6628AC00790A5F /* LaunchScreen.xib */,
@@ -188,6 +191,24 @@
 				5A927A541A6628AC00790A5F /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5AA887421A68F02F005E09A6 /* 3rd Party Libraries */ = {
+			isa = PBXGroup;
+			children = (
+				5AEA234A1A6643B200865999 /* FXBlurView.h */,
+				5AEA234B1A6643B200865999 /* FXBlurView.m */,
+			);
+			name = "3rd Party Libraries";
+			sourceTree = "<group>";
+		};
+		5AA887441A68F04C005E09A6 /* Custom Views */ = {
+			isa = PBXGroup;
+			children = (
+				5AEA234D1A66562E00865999 /* CardEntryView.h */,
+				5AEA234E1A66562E00865999 /* CardEntryView.m */,
+			);
+			name = "Custom Views";
 			sourceTree = "<group>";
 		};
 		5AEA23501A6657B200865999 /* Categories */ = {
@@ -389,6 +410,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				5A927A421A6628AC00790A5F /* ViewController.m in Sources */,
+				5AA887471A68F2E1005E09A6 /* KMCardData.m in Sources */,
 				5A927A3F1A6628AC00790A5F /* AppDelegate.m in Sources */,
 				5AEA23491A66438C00865999 /* UIImage+BlurredView.m in Sources */,
 				5AEA23741A67146F00865999 /* NSArray+Reverse.m in Sources */,
