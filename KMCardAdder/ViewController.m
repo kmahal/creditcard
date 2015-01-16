@@ -20,6 +20,7 @@ typedef void (^BlurCompletionBlock)(void);
 @property (strong, nonatomic) UIImageView *blurredImageView;
 @property (strong, nonatomic) UIButton *cancelCameraButton;
 @property (strong, nonatomic) CardIOView *cardIOView;
+@property (strong, nonatomic) CardEntryView *cardEntryView;
 
 @end
 
@@ -37,28 +38,34 @@ typedef void (^BlurCompletionBlock)(void);
 -(void)setupCardEntryView{
     
     
-    CardEntryView *view = [[CardEntryView alloc] init];
-    view.translatesAutoresizingMaskIntoConstraints = NO;
+    _cardEntryView = [[CardEntryView alloc] init];
+    _cardEntryView.translatesAutoresizingMaskIntoConstraints = NO;
 
-    [self.view addSubview:view];
+    [self.view addSubview:_cardEntryView];
     
-    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:_cardEntryView attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
     
-    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0.0f constant:40];
+    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:_cardEntryView attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0.0f constant:40];
     
-    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
+    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:_cardEntryView attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
     
-    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:view attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    NSLayoutConstraint *constraint4 = [NSLayoutConstraint constraintWithItem:_cardEntryView attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
     
     [self.view addConstraints:@[constraint1, constraint2, constraint3, constraint4]];
     
     
 }
 
+-(void)clearFields{
+    
+    [_cardEntryView clearAllFields];
+}
+
 
 -(void)setupvView{
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor venmoBlue]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
     
     [self.navigationController.navigationBar
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
@@ -66,6 +73,10 @@ typedef void (^BlurCompletionBlock)(void);
     [self.navigationController.navigationBar setTranslucent:NO];
     
     [self.navigationController setTitle:@"Add A card"];
+    
+    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self
+                                                                          action:@selector(clearFields)];
+    [self.navigationItem setRightBarButtonItem:rightBarButtonItem];
     
     self.title = @"Add A Card";
     
@@ -150,7 +161,8 @@ typedef void (^BlurCompletionBlock)(void);
 
 -(void)showCamera{
     
-
+    [_cardEntryView resignAllResponders];
+    
     
     [self blurWindowWithCompletionBlock:^{
         _cardIOView = [[CardIOView alloc] initWithFrame:self.view.bounds];
@@ -221,14 +233,21 @@ typedef void (^BlurCompletionBlock)(void);
     
 }
 
-
 -(void)removeBlurredWindow{
+    
+    [self removeBlurredWindowWithCompletionBlock:nil];
+    
+}
+
+
+-(void)removeBlurredWindowWithCompletionBlock:(BlurCompletionBlock)block{
     
     [UIView animateWithDuration:0.5f animations:^{
         [_blurredContainerView setAlpha:0.0f];
     } completion:^(BOOL finished) {
         [_cardIOView removeFromSuperview];
         [_cancelCameraButton removeFromSuperview];
+        if (block) block();
     }];
     
 }
@@ -236,17 +255,21 @@ typedef void (^BlurCompletionBlock)(void);
 #pragma mark delegate method callback
 
 - (void)cardIOView:(CardIOView *)cardIOView didScanCard:(CardIOCreditCardInfo *)info {
-    if (info) {
-        // The full card number is available as info.cardNumber, but don't log that!
-        NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@.", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
-        // Use the card info...
-    }
-    else {
-        NSLog(@"User cancelled payment info");
-        // Handle user cancellation here...
-    }
     
-    [cardIOView removeFromSuperview];
+    [self removeBlurredWindowWithCompletionBlock:^{
+        
+        if (info) {
+            // The full card number is available as info.cardNumber, but don't log that!
+            
+            NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@.", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
+            [_cardEntryView insertCardIOData:info];
+
+        }
+
+
+    }];
+
+    
 }
 
 

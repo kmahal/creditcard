@@ -13,12 +13,18 @@
 + (NSString *)insertSpacesAmexStyleForString:(NSString *)string
                    andPreserveCursorPosition:(NSUInteger *)cursorPosition;
 
++ (NSString *)insertSpacesAmexStyleForString:(NSString *)string;
+
 + (NSString *)insertSpacesEveryFourDigitsIntoString:(NSString *)string
                           andPreserveCursorPosition:(NSUInteger *)cursorPosition;
+
++ (NSString*)insertSpacesEveryFourDigitsIntoString:(NSString*)string;
 
 
 + (NSString *)removeNonDigits:(NSString *)string
     andPreserveCursorPosition:(NSUInteger *)cursorPosition;
+
++ (NSString *)removeNonDigits:(NSString *)string;
 
 -(BOOL)doesPassLuhnAlgorithm;
 

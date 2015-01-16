@@ -7,7 +7,16 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "CardIO.h"
+
 
 @interface CardEntryView : UIView <UITextFieldDelegate>
+
+-(void)clearAllFields;
+-(void)resignAllResponders;
+
+-(void)insertCardIOData:(CardIOCreditCardInfo *)info;
+
+
 
 @end

@@ -11,7 +11,7 @@ typedef enum {
     cardTypeUnknown = -1,
     cardTypeAmericanExpress = 1,
     cardTypeDiscover = 2,
-    cardTypeJCL = 3,
+    cardTypeJCB = 3,
     cardTypeMasterCard = 4,
     cardTypeVisa = 5
     
@@ -21,6 +21,8 @@ typedef enum {
 #import "NSArray+Reverse.h"
 #import "NSString+CardValidation.h"
 #import "UIColor+VenmoColors.h"
+#import "cardIO.h"
+
 
 @interface CardEntryView()
 
@@ -111,7 +113,7 @@ typedef enum {
 }
 
 
--(void)textField1BecameActive:(UITextField*)textfield{
+-(void)creditCardField:(UITextField*)textfield{
     
     
     if (textfield.text.length >0){
@@ -136,7 +138,7 @@ typedef enum {
     
     _constraint_tf1_initial = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
     
-    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.6f constant:0];
+    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.58f constant:0];
     
     NSLayoutConstraint *constraint_tf1_top = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
     
@@ -150,7 +152,7 @@ typedef enum {
                     action:@selector(reformatAsCardNumber:)
           forControlEvents:UIControlEventEditingChanged];
     
-    [_cardNumberTextField addTarget:self action:@selector(textField1BecameActive:) forControlEvents:UIControlEventEditingDidBegin];
+    [_cardNumberTextField addTarget:self action:@selector(creditCardField:) forControlEvents:UIControlEventEditingDidBegin];
     
     
 }
@@ -218,7 +220,7 @@ typedef enum {
         case cardTypeDiscover:
             return [UIImage imageNamed:@"Discover"];
             break;
-        case cardTypeJCL:
+        case cardTypeJCB:
             return [UIImage imageNamed:@"JCB"];
             break;
         case cardTypeMasterCard:
@@ -270,7 +272,7 @@ typedef enum {
             [textField setText:_previousTextFieldContent];
             textField.selectedTextRange = _previousSelection;
             
-            textField.textColor = [textField.text doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
+            textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
             
             [self closeCardNumberTextField:YES];
             return;
@@ -287,7 +289,7 @@ typedef enum {
             [textField setText:_previousTextFieldContent];
             textField.selectedTextRange = _previousSelection;
             
-            textField.textColor = [textField.text doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
+            textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
 
             
             [self closeCardNumberTextField:YES];
@@ -408,7 +410,7 @@ typedef enum {
             ccValue = [[str substringToIndex:4] intValue];
 
             if ((NSLocationInRange(ccValue, NSMakeRange(3528, (3589-3528))))){
-                _cardTypeStatus = cardTypeJCL;
+                _cardTypeStatus = cardTypeJCB;
             } else if (ccValue == 6011){
                 _cardTypeStatus = cardTypeDiscover;
             }
@@ -487,6 +489,60 @@ replacementString:(NSString *)string
     
 }
 
+
+-(void)clearAllFields{
+    _cardNumberTextField.text = @"";
+    _expirationDateTextField.text = @"";
+    _cvvTextField.text = @"";
+    _cardTypeStatus = cardTypeUnknown;
+    _creditCardImageView.image = [self imageForCardStatus];
+    
+    [self closeCardNumberTextField:NO];
+}
+
+-(void)resignAllResponders{
+    [_cardNumberTextField resignFirstResponder];
+    [_expirationDateTextField resignFirstResponder];
+    [_cvvTextField resignFirstResponder];
+
+
+}
+
+
+-(void)insertCardIOData:(CardIOCreditCardInfo *)info{
+    
+    
+    switch (info.cardType) {
+        case CardIOCreditCardTypeAmex:
+            _cardTypeStatus = cardTypeAmericanExpress;
+            break;
+        case CardIOCreditCardTypeDiscover:
+            _cardTypeStatus = cardTypeDiscover;
+            break;
+        case CardIOCreditCardTypeJCB:
+            _cardTypeStatus = cardTypeJCB;
+            break;
+        case CardIOCreditCardTypeVisa:
+            _cardTypeStatus = cardTypeVisa;
+            break;
+        case CardIOCreditCardTypeMastercard:
+            _cardTypeStatus = cardTypeMasterCard;
+        default:
+            _cardTypeStatus = cardTypeUnknown;
+            break;
+    }
+    
+    _creditCardImageView.image = [self imageForCardStatus];
+    
+    _cardNumberTextField.text = (_cardTypeStatus == cardTypeAmericanExpress) ? [NSString insertSpacesAmexStyleForString:info.cardNumber] : [NSString insertSpacesEveryFourDigitsIntoString:info.cardNumber];
+
+    _cardNumberTextField.textColor = [[NSString removeNonDigits:_cardNumberTextField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
+
+    [_cardNumberTextField becomeFirstResponder];
+    
+    [self closeCardNumberTextField:YES];
+    
+}
 
 
 

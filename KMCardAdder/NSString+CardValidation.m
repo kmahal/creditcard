@@ -186,6 +186,26 @@
 }
 
 
+
++ (NSString *)insertSpacesAmexStyleForString:(NSString *)string {
+    
+    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
+
+    for (NSUInteger i=0; i<[string length]; i++) {
+        if (((i>0) && (i == 4) && ((i % 4) == 0)) || ((i>0) && (i==10) && (i%10) == 0)) {
+            [stringWithAddedSpaces appendString:@" "];
+        }
+        unichar characterToAdd = [string characterAtIndex:i];
+        NSString *stringToAdd =
+        [NSString stringWithCharacters:&characterToAdd length:1];
+        
+        [stringWithAddedSpaces appendString:stringToAdd];
+    }
+    
+    return stringWithAddedSpaces;
+}
+
+
 + (NSString *)insertSpacesEveryFourDigitsIntoString:(NSString *)string
                           andPreserveCursorPosition:(NSUInteger *)cursorPosition
 {
@@ -206,6 +226,26 @@
     }
     
     return stringWithAddedSpaces;
+}
+
+
++ (NSString*)insertSpacesEveryFourDigitsIntoString:(NSString*)string{
+    
+    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
+
+    for (NSUInteger i=0; i<[string length]; i++) {
+        if ((i>0) && ((i % 4) == 0)) {
+            [stringWithAddedSpaces appendString:@" "];
+        }
+        unichar characterToAdd = [string characterAtIndex:i];
+        NSString *stringToAdd =
+        [NSString stringWithCharacters:&characterToAdd length:1];
+        
+        [stringWithAddedSpaces appendString:stringToAdd];
+    }
+    
+    return stringWithAddedSpaces;
+    
 }
 
 
@@ -234,17 +274,50 @@
 }
 
 
++ (NSString *)removeNonDigits:(NSString *)string {
+
+    NSMutableString *digitsOnlyString = [NSMutableString new];
+    for (NSUInteger i=0; i<[string length]; i++) {
+        unichar characterToAdd = [string characterAtIndex:i];
+        if (isdigit(characterToAdd)) {
+            NSString *stringToAdd =
+            [NSString stringWithCharacters:&characterToAdd
+                                    length:1];
+            
+            [digitsOnlyString appendString:stringToAdd];
+        }
+
+    }
+    
+    return digitsOnlyString;
+}
+
+
+-(NSArray*)stringSeparatedIntoArray{
+    
+    NSMutableArray *letterArray = [[NSMutableArray alloc] init];
+    
+    [self enumerateSubstringsInRange:NSMakeRange(0, [self length])
+                                options:(NSStringEnumerationByComposedCharacterSequences)
+                             usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+                                 [letterArray addObject:substring];
+                             }];
+    
+    return letterArray;
+}
+
+
 -(BOOL)doesPassLuhnAlgorithm{
     
-    NSArray *arrayOfValues = [self componentsSeparatedByString:@""];
+    NSArray *arrayOfValues = [self stringSeparatedIntoArray];
     
-    arrayOfValues = [arrayOfValues reversedArray];
+    NSArray *reversedArray = [arrayOfValues reversedArray];
     
     int sum = 0;
     
-    for (int i =0; i <arrayOfValues.count; i++){
+    for (int i =0; i <reversedArray.count; i++){
         
-        int value = [[arrayOfValues objectAtIndex:i] intValue];
+        int value = [[reversedArray objectAtIndex:i] intValue];
         
         if (i %2 != 0){
             
