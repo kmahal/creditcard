@@ -15,13 +15,13 @@ typedef enum {
     KMCardTypeMasterCard = 4,
     KMCardTypeVisa = 5
     
-}KMCardType;
+} KMCardType;
 
 #import <Foundation/Foundation.h>
 
 @interface KMCardData : NSObject
 
-@property(nonatomic, assign, readonly) KMCardType cardType;
+@property(nonatomic, assign) KMCardType cardType;
 
 @property (nonatomic, copy) NSString *cardNumber;
 
@@ -30,6 +30,7 @@ typedef enum {
 @property (nonatomic, copy) NSString *expirationYear;
 
 @property (nonatomic, copy) NSString *cvv;
+
 
 
 

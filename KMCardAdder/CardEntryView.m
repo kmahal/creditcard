@@ -32,6 +32,10 @@
 @property (strong, nonatomic) NSString *previousTextFieldContent;
 @property (strong, nonatomic) UITextRange *previousSelection;
 
+@property (strong, nonatomic) KMCardData *cardData;
+
+@property (nonatomic) int cvvLength;
+
 
 @end
 
@@ -45,6 +49,7 @@
     self = [super init];
     
     if (self){
+        
         
         _cardTypeStatus = KMCardTypeUnknown;
         self.backgroundColor = [UIColor whiteColor];
@@ -62,6 +67,15 @@
 
 
 -(void)setupCardImageView{
+    
+    _cardData = [[KMCardData alloc] init];
+    
+    _cvvLength = 3;
+    
+    [self addObserver:self forKeyPath:@"cardData.cardType" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+    [self addObserver:self forKeyPath:@"self.cardTypeStatus" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
+
+    
     
     //setting up the container view that will have the card image view
     
@@ -104,6 +118,10 @@
     [_cardContainerView addConstraints:@[constraint_cc_height, constraint4]];
     
     [_cardContainerView addConstraints:@[constraint5, constraint6]];
+    
+    //[self setValue:KMCardTypeUnknown forKey:@"cardType"];
+    [_cardData setCardType:KMCardTypeUnknown];
+    
     
 }
 
@@ -224,7 +242,6 @@
     
     [_cvvTextField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
     [_cvvTextField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
-    
     
 }
 
@@ -564,6 +581,24 @@ replacementString:(NSString *)string
     [_cardNumberTextField becomeFirstResponder];
     
     [self closeCardNumberTextField:YES];
+    
+}
+
+
+
+-(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
+    
+    NSLog(@"shit happening for key path: %@", keyPath);
+    
+    NSLog(@"change: %@", change);
+    
+    if ([keyPath isEqualToString:@"cardData.cardType"]){
+        _cvvLength = ([[change objectForKey:@"new"] intValue] == KMCardTypeAmericanExpress ) ? 4 : 3;
+        
+    } else if ([keyPath isEqualToString:@"self.cardTypeStatus"]){
+        _cvvLength = ([[change objectForKey:@"new"] intValue] == KMCardTypeAmericanExpress ) ? 4 : 3;
+        
+    }
     
 }
 
