@@ -8,7 +8,6 @@
 
 typedef enum {
     
-    KMCardErrorNone = 0,
     KMCardErrorCard = 1,
     KMCardErrorDate = 2,
     KMCardErrorCVV = 3,

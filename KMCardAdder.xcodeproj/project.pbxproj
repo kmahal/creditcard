@@ -157,16 +157,13 @@
 		5A927A381A6628AC00790A5F /* KMCardAdder */ = {
 			isa = PBXGroup;
 			children = (
+				5AA887561A6A53C4005E09A6 /* Custom Classes */,
 				5AA887441A68F04C005E09A6 /* Custom Views */,
 				5AA887421A68F02F005E09A6 /* 3rd Party Libraries */,
 				5AEA23501A6657B200865999 /* Categories */,
 				5AEA23511A6657D900865999 /* Assets */,
 				5A927A3D1A6628AC00790A5F /* AppDelegate.h */,
 				5A927A3E1A6628AC00790A5F /* AppDelegate.m */,
-				5AA887451A68F2E0005E09A6 /* KMCardData.h */,
-				5AA887461A68F2E0005E09A6 /* KMCardData.m */,
-				5AA887531A6A3BF0005E09A6 /* KMCardError.h */,
-				5AA887541A6A3BF0005E09A6 /* KMCardError.m */,
 				5A927A401A6628AC00790A5F /* ViewController.h */,
 				5A927A411A6628AC00790A5F /* ViewController.m */,
 				5A927A431A6628AC00790A5F /* Main.storyboard */,
@@ -220,6 +217,17 @@
 				5AA887481A690FE7005E09A6 /* KMCardData_SetData.h */,
 			);
 			name = "Custom Views";
+			sourceTree = "<group>";
+		};
+		5AA887561A6A53C4005E09A6 /* Custom Classes */ = {
+			isa = PBXGroup;
+			children = (
+				5AA887451A68F2E0005E09A6 /* KMCardData.h */,
+				5AA887461A68F2E0005E09A6 /* KMCardData.m */,
+				5AA887531A6A3BF0005E09A6 /* KMCardError.h */,
+				5AA887541A6A3BF0005E09A6 /* KMCardError.m */,
+			);
+			name = "Custom Classes";
 			sourceTree = "<group>";
 		};
 		5AEA23501A6657B200865999 /* Categories */ = {

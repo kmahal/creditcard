@@ -10,6 +10,10 @@
 
 @interface NSString (CardValidation)
 
++(NSString*)redactedAmexCardInfo:(NSString*)str;
+
++(NSString*)redactedCardInfo:(NSString*)str;
+
 + (NSString *)insertSpacesAmexStyleForString:(NSString *)string
                    andPreserveCursorPosition:(NSUInteger *)cursorPosition;
 

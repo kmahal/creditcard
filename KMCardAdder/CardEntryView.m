@@ -566,7 +566,7 @@ replacementString:(NSString *)string
     
     int errorCount = 0;
     
-    BOOL cardValue = (([NSString removeNonDigits:_cardNumberTextField.text].length == _maxCardLength) && [_cardNumberTextField.text doesPassLuhnAlgorithm]);
+    BOOL cardValue = (([NSString removeNonDigits:_cardNumberTextField.text].length == _maxCardLength) && [[NSString removeNonDigits:_cardNumberTextField.text] doesPassLuhnAlgorithm]);
     
     BOOL dateValue = (_expirationDateTextField.text.length == 5);
     
@@ -575,6 +575,7 @@ replacementString:(NSString *)string
     
     if (cardValue) {
         _cardData.cardNumber = [NSString removeNonDigits:_cardNumberTextField.text];
+        _cardData.redactedCardNumber = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? [NSString redactedAmexCardInfo:_cardNumberTextField.text] : [NSString redactedCardInfo:_cardNumberTextField.text];
     } else {
         errorCount += 1;
     }

@@ -11,6 +11,52 @@
 
 @implementation NSString (CardValidation)
 
+
++(NSString*)redactedAmexCardInfo:(NSString*)str{
+    
+    NSMutableArray *array = [str stringSeparatedIntoArray].mutableCopy;
+    
+    for (int i = 0; i <array.count; i++){
+        
+        if (i == array.count-6){
+            break;
+        }
+        
+        if (![[array objectAtIndex:i] isEqualToString:@" "]){
+            [array replaceObjectAtIndex:i withObject:@"X"];
+        }
+        
+    }
+    
+    return [array componentsJoinedByString:@""];
+    
+    
+}
+
++(NSString*)redactedCardInfo:(NSString*)str{
+    
+    NSMutableArray *array = [str stringSeparatedIntoArray].mutableCopy;
+    
+    for (int i = 0; i <array.count; i++){
+        
+        if (i == array.count-5){
+            break;
+        }
+        
+        if (![[array objectAtIndex:i] isEqualToString:@" "]){
+            [array replaceObjectAtIndex:i withObject:@"X"];
+        }
+        
+    }
+    
+    return [array componentsJoinedByString:@""];
+    
+    
+}
+
+
+
+
 +(NSString*) filteredDateStringFromString:(NSString*)string WithFilter:(NSString*)filter
 {
     NSUInteger onOriginal = 0, onFilter = 0, onOutput = 0;
@@ -87,7 +133,7 @@
             value = [[NSString stringWithFormat:@"%c", [string characterAtIndex:4]] intValue];
             
             if (tempValue == 1){
-                if (!((value >= 5) && (value <=9))){
+                if ((value >= 5) && (value <=9)){
                     return string;
                 } else {
                     return [string substringToIndex:4];
@@ -107,61 +153,6 @@
     
 }
 
-//+(NSString*)insertCorrectDateDigitsForString:(NSString*)string andPreserveCursorPosition:(NSUInteger*)cursorPosition{
-//    
-//    string = [NSString removeNonDigits:string andPreserveCursorPosition:cursorPosition];
-//    
-//    NSMutableString *stringWithAddedSpaces = [NSMutableString new];
-//    NSUInteger cursorPositionInSpacelessString = *cursorPosition;
-//    
-//    int value = 0;
-//    
-//    switch (string.length) {
-//        case 1:
-//        {
-//            value = [[NSString stringWithFormat:@"%c", [string characterAtIndex:0]] intValue];
-//            if (value != 0 || value != 1){
-//                [stringWithAddedSpaces insertString:@"0" atIndex:0];
-//                if (0 < cursorPositionInSpacelessString) {
-//                    (*cursorPosition)++;
-//                }
-//                
-//                unichar characterToAdd = [string characterAtIndex:0];
-//                NSString *stringToAdd =
-//                [NSString stringWithCharacters:&characterToAdd length:1];
-//                
-//                [stringWithAddedSpaces appendString:stringToAdd];
-//                
-//                return stringWithAddedSpaces;
-//            }
-//        }
-//            break;
-//        case 2:
-//        {
-//            value = [[string substringToIndex:2] intValue];
-//            
-//            [stringWithAddedSpaces appendString:@" "];
-//            if (2 < cursorPositionInSpacelessString) {
-//                (*cursorPosition)++;
-//            }
-//            
-//                unichar characterToAdd = [string characterAtIndex:0];
-//                NSString *stringToAdd =
-//                [NSString stringWithCharacters:&characterToAdd length:1];
-//                
-//                [stringWithAddedSpaces appendString:stringToAdd];
-//                
-//                return stringWithAddedSpaces;
-//            }
-//        }
-//            break;
-//            
-//            
-//        default:
-//            break;
-//    }
-//    
-//}
 
 + (NSString *)insertSpacesAmexStyleForString:(NSString *)string
                    andPreserveCursorPosition:(NSUInteger *)cursorPosition

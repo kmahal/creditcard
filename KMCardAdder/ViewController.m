@@ -24,6 +24,9 @@ typedef void (^BlurCompletionBlock)(void);
 @property (strong, nonatomic) UILabel *errorLabel;
 @property (strong, nonatomic) NSLayoutConstraint *errorLabelHidden_constraint;
 @property (strong, nonatomic) NSLayoutConstraint *errorLabelShown_constraint;
+@property (strong, nonatomic) UILabel *successLabel;
+@property (strong, nonatomic) NSLayoutConstraint *successLabelHidden_constraint;
+@property (strong, nonatomic) NSLayoutConstraint *successLabelShown_constraint;
 
 
 @end
@@ -38,10 +41,11 @@ typedef void (^BlurCompletionBlock)(void);
     
     [self setupCardEntryView];
     
-    [self createErrorView];
+    [self setupErrorView];
 
     [self registerForApplicationStateNotifications];
 
+    [self setupSuccessMessageView];
 
 }
 
@@ -132,7 +136,30 @@ typedef void (^BlurCompletionBlock)(void);
     
 }
 
--(void)createErrorView{
+-(void)setupSuccessMessageView{
+    
+    _successLabel = [[UILabel alloc] init];
+    _successLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    _successLabel.textAlignment = NSTextAlignmentCenter;
+    [_successLabel setFont:[UIFont systemFontOfSize:12.0f]];
+    [_successLabel setTextColor:[UIColor whiteColor]];
+    [_successLabel setBackgroundColor:[UIColor venmoGreen]];
+    
+    [[[[UIApplication sharedApplication] delegate] window] addSubview:_successLabel];
+    
+    NSLayoutConstraint *constraint_error_1 = [NSLayoutConstraint constraintWithItem:_successLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:[[[UIApplication sharedApplication] delegate] window] attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    
+    NSLayoutConstraint *constraint_error_2 = [NSLayoutConstraint constraintWithItem:_successLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.navigationController.navigationBar attribute:NSLayoutAttributeHeight multiplier:1.0f constant:22];
+    
+    _successLabelHidden_constraint = [NSLayoutConstraint constraintWithItem:_successLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:[[[UIApplication sharedApplication] delegate] window] attribute:NSLayoutAttributeTop multiplier:1.0f constant:0];
+    
+    [[[[UIApplication sharedApplication] delegate] window] addConstraints:@[constraint_error_1, constraint_error_2, _successLabelHidden_constraint]];
+    
+    _successLabelShown_constraint = [NSLayoutConstraint constraintWithItem:_successLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:[[[UIApplication sharedApplication] delegate] window] attribute:NSLayoutAttributeTop multiplier:1.0f constant:0];
+    
+}
+
+-(void)setupErrorView{
     
     _errorLabel = [[UILabel alloc] init];
     _errorLabel.translatesAutoresizingMaskIntoConstraints = NO;
@@ -157,6 +184,10 @@ typedef void (^BlurCompletionBlock)(void);
     
     
 }
+
+
+
+
 
 -(void)clearFields{
     
@@ -193,7 +224,29 @@ typedef void (^BlurCompletionBlock)(void);
         
         if (!error){
             
-
+            NSString *string = nil;
+            
+            switch (cardData.cardType) {
+                case KMCardTypeAmericanExpress:
+                    string = @"American Express";
+                    break;
+                case KMCardTypeDiscover:
+                    string = @"Discover";
+                    break;
+                case KMCardTypeJCB:
+                    string = @"JCB";
+                    break;
+                case KMCardTypeVisa:
+                    string = @"Visa";
+                    break;
+                case KMCardTypeMasterCard:
+                    string = @"MasterCard";
+                default:
+                    string = @"Unknown";
+                    break;
+            }
+            
+            [self insertSuccessViewWithMessage:[NSString stringWithFormat:@"%@ %@, %d/%d was added!", string, cardData.redactedCardNumber, cardData.expirationMonth, cardData.expirationYear]];
             
         } else {
             
@@ -314,6 +367,33 @@ typedef void (^BlurCompletionBlock)(void);
     
     
 }
+
+
+-(void)insertSuccessViewWithMessage:(NSString*)successMessage{
+    
+    [self clearFields];
+    
+    _successLabel.text = successMessage;
+    
+    [[[[UIApplication sharedApplication] delegate] window] removeConstraint:_successLabelHidden_constraint];
+    [[[[UIApplication sharedApplication] delegate] window] addConstraint:_successLabelShown_constraint];
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        [[[[UIApplication sharedApplication] delegate] window] layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+        [[[[UIApplication sharedApplication] delegate] window] removeConstraint:_successLabelShown_constraint];
+        [[[[UIApplication sharedApplication] delegate] window] addConstraint:_successLabelHidden_constraint];
+        
+        [UIView animateWithDuration:0.3f delay:3.0f options:UIViewAnimationOptionTransitionNone animations:^{
+            [[[[UIApplication sharedApplication] delegate] window] layoutIfNeeded];
+        } completion:^(BOOL finished) {
+
+        }];
+    }];
+    
+}
+
 
 
 #pragma mark blurring methods

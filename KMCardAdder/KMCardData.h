@@ -28,6 +28,8 @@ typedef enum {
 
 @property (nonatomic, copy) NSString *cardNumber;
 
+@property (nonatomic, copy) NSString *redactedCardNumber;
+
 @property (nonatomic) int expirationMonth;
 
 @property (nonatomic) int expirationYear;

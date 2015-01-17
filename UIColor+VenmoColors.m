@@ -33,6 +33,13 @@
     return [UIColor colorWithHexString:@"#FF999A"];
 }
 
+
++(UIColor*)venmoGreen{
+    
+    return [UIColor colorWithHexString:@"#267E1A"];
+    
+}
+
 + (UIColor *)colorWithHexString:(NSString *)str {
     const char *cStr = [str cStringUsingEncoding:NSASCIIStringEncoding];
     long x = strtol(cStr+1, NULL, 16);
