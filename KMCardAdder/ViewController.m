@@ -67,9 +67,7 @@ typedef void (^BlurCompletionBlock)(void);
      setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
     
     [self.navigationController.navigationBar setTranslucent:NO];
-    
-    [self.navigationController setTitle:@"Add A card"];
-    
+        
     //UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self
     // action:@selector(clearFields)];
     //[self.navigationItem setRightBarButtonItem:rightBarButtonItem];
