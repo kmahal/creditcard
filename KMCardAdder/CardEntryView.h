@@ -19,10 +19,7 @@ typedef void (^KMCardDataResponseBlock)(KMCardData *cardData, KMCardError *error
 
 -(void)clearAllFields;
 -(void)resignAllResponders;
-
 -(void)insertCardIOData:(CardIOCreditCardInfo *)info;
-
-
 -(void)getCurrentCardDataWithBlock:(KMCardDataResponseBlock)block;
 
 @end

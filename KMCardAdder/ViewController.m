@@ -34,7 +34,7 @@ typedef void (^BlurCompletionBlock)(void);
     [super viewDidLoad];
 
 
-    [self setupvView];
+    [self setupView];
     
     [self setupCardEntryView];
     
@@ -46,7 +46,15 @@ typedef void (^BlurCompletionBlock)(void);
 }
 
 
--(void)setupvView{
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+    // Dispose of any resources that can be recreated.
+}
+
+#pragma mark setup methods
+
+
+-(void)setupView{
     
     [self.navigationController.navigationBar setBarTintColor:[UIColor venmoBlue]];
     [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
@@ -176,6 +184,7 @@ typedef void (^BlurCompletionBlock)(void);
     }
 }
 
+# pragma mark IBActions
 
 -(IBAction)submitButtonPressed:(id)sender{
     
@@ -233,32 +242,6 @@ typedef void (^BlurCompletionBlock)(void);
     }];
 }
 
--(void)insertErrorViewWithErrorMessage:(NSString*)errorMessage withSender:(id)sender{
-    
-    UIButton *button = (UIButton*)sender;
-    button.enabled = NO;
-    
-    _errorLabel.text = errorMessage;
-    
-    [self.view removeConstraint:_errorLabelHidden_constraint];
-    [self.view addConstraint:_errorLabelShown_constraint];
-    
-    [UIView animateWithDuration:0.3f animations:^{
-        [self.view layoutIfNeeded];
-    } completion:^(BOOL finished) {
-        
-        [self.view removeConstraint:_errorLabelShown_constraint];
-        [self.view addConstraint:_errorLabelHidden_constraint];
-        
-        [UIView animateWithDuration:0.3f delay:3.0f options:UIViewAnimationOptionTransitionNone animations:^{
-            [self.view layoutIfNeeded];
-        } completion:^(BOOL finished) {
-            button.enabled = YES;
-        }];
-    }];
-    
-    
-}
 
 -(void)showCamera{
     
@@ -305,6 +288,35 @@ typedef void (^BlurCompletionBlock)(void);
     
 }
 
+-(void)insertErrorViewWithErrorMessage:(NSString*)errorMessage withSender:(id)sender{
+    
+    UIButton *button = (UIButton*)sender;
+    button.enabled = NO;
+    
+    _errorLabel.text = errorMessage;
+    
+    [self.view removeConstraint:_errorLabelHidden_constraint];
+    [self.view addConstraint:_errorLabelShown_constraint];
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+        [self.view removeConstraint:_errorLabelShown_constraint];
+        [self.view addConstraint:_errorLabelHidden_constraint];
+        
+        [UIView animateWithDuration:0.3f delay:3.0f options:UIViewAnimationOptionTransitionNone animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            button.enabled = YES;
+        }];
+    }];
+    
+    
+}
+
+
+#pragma mark blurring methods
 
 -(void)blurWindowWithCompletionBlock:(BlurCompletionBlock)block{
     
@@ -372,27 +384,5 @@ typedef void (^BlurCompletionBlock)(void);
 }
 
 
-
-
--(void)viewWillAppear:(BOOL)animated{
-    
-    
-    [super viewWillAppear:animated];
-    
-    
-}
-
-
--(void)viewDidAppear:(BOOL)animated{
-    [super viewDidAppear:animated];
-    
-    
-    
-}
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 @end

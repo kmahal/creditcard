@@ -66,6 +66,9 @@
 }
 
 
+#pragma mark setup methods
+
+
 
 -(void)setupCardImageView{
     
@@ -74,10 +77,8 @@
     _cvvLength = 3;
     _maxCardLength = 6;
     
-    [self addObserver:self forKeyPath:@"cardData.cardType" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self addObserver:self forKeyPath:@"self.cardTypeStatus" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
 
-    
     
     //setting up the container view that will have the card image view
     
@@ -121,12 +122,106 @@
     
     [_cardContainerView addConstraints:@[constraint5, constraint6]];
     
-
-   // [_cardData setCardType:KMCardTypeUnknown];
      self.cardTypeStatus = KMCardTypeUnknown;
     
 }
 
+
+
+
+-(void)setupFirstTF{
+    
+    //setting up the credit card number text field
+    
+    _cardNumberTextField = [[UITextField alloc] init];
+    _cardNumberTextField.placeholder = @"1234 5678 9760 2892";
+    _cardNumberTextField.backgroundColor = [UIColor whiteColor];
+    _cardNumberTextField.delegate = self;
+    _cardNumberTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    [_cardNumberTextField setKeyboardType:UIKeyboardTypeNumberPad];
+    
+    [self addSubview:_cardNumberTextField];
+    
+    
+    _constraint_tf1_initial = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
+    
+    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.58f constant:0];
+    
+    NSLayoutConstraint *constraint_tf1_top = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    
+    NSLayoutConstraint *constraint_tf1_bottom = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
+    
+    _constraint_tf1_completed = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:0];
+    
+    [self addConstraints:@[_constraint_tf1_initial, constraint_tf1_width, constraint_tf1_top, constraint_tf1_bottom]];
+    
+    [_cardNumberTextField addTarget:self
+                             action:@selector(reformatAsCardNumber:)
+                   forControlEvents:UIControlEventEditingChanged];
+    
+    [_cardNumberTextField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+    
+    
+}
+
+-(void)setupSecondTF{
+    
+    //setting up the expiration date text field
+    
+    _expirationDateTextField = [[UITextField alloc] init];
+    _expirationDateTextField.placeholder = @"MM/YY";
+    _expirationDateTextField.backgroundColor = [UIColor whiteColor];
+    _expirationDateTextField.delegate = self;
+    _expirationDateTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    [_expirationDateTextField setKeyboardType:UIKeyboardTypeNumberPad];
+    [_expirationDateTextField setAlpha:0.0f];
+    
+    [self addSubview:_expirationDateTextField];
+    
+    NSLayoutConstraint *constraint_tf2_width = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.2f constant:0];
+    
+    NSLayoutConstraint *constraint_tf2_centerX = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
+    
+    NSLayoutConstraint *constraint_tf2_top = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    
+    NSLayoutConstraint *constraint_tf2_bottom = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
+    
+    [self addConstraints:@[constraint_tf2_width, constraint_tf2_centerX, constraint_tf2_top, constraint_tf2_bottom]];
+    
+}
+
+
+-(void)setupThirdtf{
+    
+    _cvvTextField = [[UITextField alloc] init];
+    _cvvTextField.placeholder = @"CVV";
+    _cvvTextField.backgroundColor = [UIColor whiteColor];
+    _cvvTextField.delegate = self;
+    _cvvTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    [_cvvTextField setKeyboardType:UIKeyboardTypeNumberPad];
+    [_cvvTextField setAlpha:0.0f];
+    
+    [self addSubview:_cvvTextField];
+    
+    NSLayoutConstraint *constraint_tf3_width = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.2f constant:0];
+    
+    NSLayoutConstraint *constraint_tf3_centerX = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:0.8f constant:0];
+    
+    NSLayoutConstraint *constraint_tf3_top = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    
+    NSLayoutConstraint *constraint_tf3_bottom = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
+    
+    [self addConstraints:@[constraint_tf3_width, constraint_tf3_centerX, constraint_tf3_top, constraint_tf3_bottom]];
+    
+    [_cvvTextField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+    [_cvvTextField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
+    
+}
+
+
+
+
+#pragma mark textfield control events selectors
 
 -(void)textFieldBeganEditing:(UITextField*)textfield{
     
@@ -154,98 +249,136 @@
 }
 
 
--(void)setupFirstTF{
+-(void)reformatAsCardNumber:(UITextField *)textField
+{
+    // In order to make the cursor end up positioned correctly, we need to
+    // explicitly reposition it after we inject spaces into the text.
+    // targetCursorPosition keeps track of where the cursor needs to end up as
+    // we modify the string, and at the end we set the cursor position to it.
+    NSUInteger targetCursorPosition =
+    [textField offsetFromPosition:textField.beginningOfDocument
+                       toPosition:textField.selectedTextRange.start];
     
-    //setting up the credit card number text field
+    NSString *cardNumberWithoutSpaces = [NSString removeNonDigits:textField.text andPreserveCursorPosition:&targetCursorPosition];
     
-    _cardNumberTextField = [[UITextField alloc] init];
-    _cardNumberTextField.placeholder = @"1234 5678 9760 2892";
-    _cardNumberTextField.backgroundColor = [UIColor whiteColor];
-    _cardNumberTextField.delegate = self;
-    _cardNumberTextField.translatesAutoresizingMaskIntoConstraints = NO;
-    [_cardNumberTextField setKeyboardType:UIKeyboardTypeNumberPad];
+    [self checkCardTypeForString:cardNumberWithoutSpaces];
     
-    [self addSubview:_cardNumberTextField];
+    NSString *cardNumberWithSpaces = nil;
     
+    
+    if ([cardNumberWithoutSpaces length] >= _maxCardLength){
+        
+        if ([cardNumberWithoutSpaces length] > _maxCardLength){
+            [textField setText:_previousTextFieldContent];
+            textField.selectedTextRange = _previousSelection;
+        }
+        
+        
+        if (!(self.cardTypeStatus == KMCardTypeUnknown)) {
+            
+            textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
+            
+            [self closeCardNumberTextField:YES];
+        }
+        
+        return;
+        
+        
+        
+    } else {
+        
+        textField.textColor = [UIColor blackColor];
+        
+        switch (self.cardTypeStatus) {
+            case KMCardTypeAmericanExpress:
+                cardNumberWithSpaces = [NSString insertSpacesAmexStyleForString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+                break;
+            case KMCardTypeUnknown:
+                cardNumberWithSpaces = cardNumberWithoutSpaces;
+                break;
+            default:
+                cardNumberWithSpaces = [NSString insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+                break;
+        }
+        
+    }
+    
+    textField.text = cardNumberWithSpaces;
+    UITextPosition *targetPosition =
+    [textField positionFromPosition:[textField beginningOfDocument]
+                             offset:targetCursorPosition];
+    
+    [textField setSelectedTextRange:
+     [textField textRangeFromPosition:targetPosition
+                           toPosition:targetPosition]
+     ];
+}
 
-    _constraint_tf1_initial = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeLeft relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:20];
+
+
+-(void)checkCardTypeForString:(NSString*)str{
     
-    NSLayoutConstraint *constraint_tf1_width = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.58f constant:0];
+    NSLog(@"str: %@", str);
     
-    NSLayoutConstraint *constraint_tf1_top = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
+    int ccValue = [[str substringToIndex:str.length] intValue];
     
-    NSLayoutConstraint *constraint_tf1_bottom = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
-    
-     _constraint_tf1_completed = [NSLayoutConstraint constraintWithItem:_cardNumberTextField attribute:NSLayoutAttributeRight relatedBy:NSLayoutRelationEqual toItem:_cardContainerView attribute:NSLayoutAttributeRight multiplier:1.0f constant:0];
-    
-    [self addConstraints:@[_constraint_tf1_initial, constraint_tf1_width, constraint_tf1_top, constraint_tf1_bottom]];
-    
-    [_cardNumberTextField addTarget:self
-                    action:@selector(reformatAsCardNumber:)
-          forControlEvents:UIControlEventEditingChanged];
-    
-    [_cardNumberTextField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
+    switch (str.length) {
+        case 1:
+        {
+            self.cardTypeStatus = (ccValue == 4) ? KMCardTypeVisa : KMCardTypeUnknown;
+        }
+            break;
+        case 2:
+        {
+            
+            if ((ccValue == 34) || (ccValue == 37)){
+                self.cardTypeStatus = KMCardTypeAmericanExpress;
+            } else if ((NSLocationInRange([[str substringToIndex:2] intValue], NSMakeRange(51, (55-51))))){
+                self.cardTypeStatus = KMCardTypeMasterCard;
+            } else if (ccValue == 65){
+                self.cardTypeStatus = KMCardTypeDiscover;
+            }
+            
+        }
+            break;
+            
+        case 3:
+        {
+            self.cardTypeStatus = (NSLocationInRange(ccValue, NSMakeRange(644, (649-644)))) ? KMCardTypeDiscover : self.cardTypeStatus;
+        }
+            break;
+            
+        case 4:
+        {
+            
+            if ((NSLocationInRange(ccValue, NSMakeRange(3528, (3589-3528))))){
+                self.cardTypeStatus = KMCardTypeJCB;
+            } else if (ccValue == 6011){
+                self.cardTypeStatus = KMCardTypeDiscover;
+            }
+            
+        }
+            
+            break;
+            
+        case 6:
+        {
+            
+            if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-622126))))){
+                self.cardTypeStatus = KMCardTypeDiscover;
+            }
+            break;
+        }
+        default:
+            break;
+    }
     
     
 }
 
--(void)setupSecondTF{
-    
-    //setting up the expiration date text field
-    
-    _expirationDateTextField = [[UITextField alloc] init];
-    _expirationDateTextField.placeholder = @"MM/YY";
-    _expirationDateTextField.backgroundColor = [UIColor whiteColor];
-    _expirationDateTextField.delegate = self;
-    _expirationDateTextField.translatesAutoresizingMaskIntoConstraints = NO;
-    [_expirationDateTextField setKeyboardType:UIKeyboardTypeNumberPad];
-    [_expirationDateTextField setAlpha:0.0f];
-    
-    [self addSubview:_expirationDateTextField];
-    
-    //self.backgroundColor = [UIColor grayColor];
-    
-    NSLayoutConstraint *constraint_tf2_width = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.2f constant:0];
-    
-    NSLayoutConstraint *constraint_tf2_centerX = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:0.5f constant:0];
-    
-    NSLayoutConstraint *constraint_tf2_top = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
-    
-    NSLayoutConstraint *constraint_tf2_bottom = [NSLayoutConstraint constraintWithItem:_expirationDateTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
-    
-    [self addConstraints:@[constraint_tf2_width, constraint_tf2_centerX, constraint_tf2_top, constraint_tf2_bottom]];
-    
-}
 
 
--(void)setupThirdtf{
-    
-    _cvvTextField = [[UITextField alloc] init];
-    _cvvTextField.placeholder = @"CVV";
-    _cvvTextField.backgroundColor = [UIColor whiteColor];
-    _cvvTextField.delegate = self;
-    _cvvTextField.translatesAutoresizingMaskIntoConstraints = NO;
-    [_cvvTextField setKeyboardType:UIKeyboardTypeNumberPad];
-    [_cvvTextField setAlpha:0.0f];
-    
-    [self addSubview:_cvvTextField];
-    
-   // self.backgroundColor = [UIColor grayColor];
-    
-    NSLayoutConstraint *constraint_tf3_width = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeWidth multiplier:0.2f constant:0];
-    
-    NSLayoutConstraint *constraint_tf3_centerX = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeCenterX relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeRight multiplier:0.8f constant:0];
-    
-    NSLayoutConstraint *constraint_tf3_top = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
-    
-    NSLayoutConstraint *constraint_tf3_bottom = [NSLayoutConstraint constraintWithItem:_cvvTextField attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:self attribute:NSLayoutAttributeBottom multiplier:0.9 constant:0];
-    
-    [self addConstraints:@[constraint_tf3_width, constraint_tf3_centerX, constraint_tf3_top, constraint_tf3_bottom]];
-    
-    [_cvvTextField addTarget:self action:@selector(textFieldBeganEditing:) forControlEvents:UIControlEventEditingDidBegin];
-    [_cvvTextField addTarget:self action:@selector(textFieldEndedEditing:) forControlEvents:UIControlEventEditingDidEnd];
-    
-}
+#pragma mark KVO image for card status
 
 
 -(UIImage*)imageForCardStatus{
@@ -278,70 +411,6 @@
 }
 
 
--(void)reformatAsCardNumber:(UITextField *)textField
-{
-    // In order to make the cursor end up positioned correctly, we need to
-    // explicitly reposition it after we inject spaces into the text.
-    // targetCursorPosition keeps track of where the cursor needs to end up as
-    // we modify the string, and at the end we set the cursor position to it.
-    NSUInteger targetCursorPosition =
-    [textField offsetFromPosition:textField.beginningOfDocument
-                       toPosition:textField.selectedTextRange.start];
-    
-    NSString *cardNumberWithoutSpaces = [NSString removeNonDigits:textField.text andPreserveCursorPosition:&targetCursorPosition];
-    
-    [self checkCardTypeForString:cardNumberWithoutSpaces];
-    
-    NSString *cardNumberWithSpaces = nil;
-    
-    
-    if ([cardNumberWithoutSpaces length] >= _maxCardLength){
-        
-        if ([cardNumberWithoutSpaces length] > _maxCardLength){
-            [textField setText:_previousTextFieldContent];
-            textField.selectedTextRange = _previousSelection;
-        }
-
-        
-        if (!(self.cardTypeStatus == KMCardTypeUnknown)) {
-            
-            textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
-            
-            [self closeCardNumberTextField:YES];
-        }
-        
-        return;
-
-        
-        
-    } else {
-        
-        textField.textColor = [UIColor blackColor];
-        
-        switch (self.cardTypeStatus) {
-            case KMCardTypeAmericanExpress:
-                cardNumberWithSpaces = [NSString insertSpacesAmexStyleForString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
-                break;
-            case KMCardTypeUnknown:
-                cardNumberWithSpaces = cardNumberWithoutSpaces;
-                break;
-            default:
-                cardNumberWithSpaces = [NSString insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
-                break;
-        }
-        
-    }
-    
-    textField.text = cardNumberWithSpaces;
-    UITextPosition *targetPosition =
-    [textField positionFromPosition:[textField beginningOfDocument]
-                             offset:targetCursorPosition];
-    
-    [textField setSelectedTextRange:
-     [textField textRangeFromPosition:targetPosition
-                           toPosition:targetPosition]
-     ];
-}
 
 
 -(void)closeCardNumberTextField:(BOOL)close{
@@ -397,65 +466,7 @@
 }
 
 
--(void)checkCardTypeForString:(NSString*)str{
-    
-    NSLog(@"str: %@", str);
-    
-    int ccValue = [[str substringToIndex:str.length] intValue];
-    
-    switch (str.length) {
-        case 1:
-        {
-            self.cardTypeStatus = (ccValue == 4) ? KMCardTypeVisa : KMCardTypeUnknown;
-        }
-            break;
-        case 2:
-        {
-            
-            if ((ccValue == 34) || (ccValue == 37)){
-                self.cardTypeStatus = KMCardTypeAmericanExpress;
-            } else if ((NSLocationInRange([[str substringToIndex:2] intValue], NSMakeRange(51, (55-51))))){
-                self.cardTypeStatus = KMCardTypeMasterCard;
-            } else if (ccValue == 65){
-                self.cardTypeStatus = KMCardTypeDiscover;
-            }
-            
-        }
-            break;
-            
-        case 3:
-        {
-            self.cardTypeStatus = (NSLocationInRange(ccValue, NSMakeRange(644, (649-644)))) ? KMCardTypeDiscover : self.cardTypeStatus;
-        }
-            break;
-            
-        case 4:
-        {
-
-            if ((NSLocationInRange(ccValue, NSMakeRange(3528, (3589-3528))))){
-                self.cardTypeStatus = KMCardTypeJCB;
-            } else if (ccValue == 6011){
-                self.cardTypeStatus = KMCardTypeDiscover;
-            }
-            
-        }
-            
-            break;
-            
-        case 6:
-        {
-            
-            if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-622126))))){
-                self.cardTypeStatus = KMCardTypeDiscover;
-            }
-            break;
-        }
-        default:
-            break;
-    }
-    
-    
-}
+#pragma mark textfield delegate methods
 
 
 -(BOOL)textField:(UITextField *)textField
@@ -521,59 +532,8 @@ replacementString:(NSString *)string
 }
 
 
--(void)clearAllFields{
-    _cardNumberTextField.text = @"";
-    _expirationDateTextField.text = @"";
-    _cvvTextField.text = @"";
-    self.cardTypeStatus = KMCardTypeUnknown;
-    _creditCardImageView.image = [self imageForCardStatus];
-    
-    [self closeCardNumberTextField:NO];
-}
 
--(void)resignAllResponders{
-    [_cardNumberTextField resignFirstResponder];
-    [_expirationDateTextField resignFirstResponder];
-    [_cvvTextField resignFirstResponder];
-
-
-}
-
-
--(void)insertCardIOData:(CardIOCreditCardInfo *)info{
-    
-    
-    switch (info.cardType) {
-        case CardIOCreditCardTypeAmex:
-            self.cardTypeStatus = KMCardTypeAmericanExpress;
-            break;
-        case CardIOCreditCardTypeDiscover:
-            self.cardTypeStatus = KMCardTypeDiscover;
-            break;
-        case CardIOCreditCardTypeJCB:
-            self.cardTypeStatus = KMCardTypeJCB;
-            break;
-        case CardIOCreditCardTypeVisa:
-            self.cardTypeStatus = KMCardTypeVisa;
-            break;
-        case CardIOCreditCardTypeMastercard:
-            self.cardTypeStatus = KMCardTypeMasterCard;
-        default:
-            self.cardTypeStatus = KMCardTypeUnknown;
-            break;
-    }
-    
-    _cardNumberTextField.text = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? [NSString insertSpacesAmexStyleForString:info.cardNumber] : [NSString insertSpacesEveryFourDigitsIntoString:info.cardNumber];
-
-    _cardNumberTextField.textColor = [[NSString removeNonDigits:_cardNumberTextField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
-
-    [_cardNumberTextField becomeFirstResponder];
-    
-    [self closeCardNumberTextField:YES];
-    
-}
-
-
+#pragma mark KVO operations
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     
@@ -599,6 +559,8 @@ replacementString:(NSString *)string
     
 }
 
+
+#pragma mark public methods
 
 -(void)getCurrentCardDataWithBlock:(KMCardDataResponseBlock)block{
     
@@ -643,9 +605,62 @@ replacementString:(NSString *)string
     block(_cardData, error);
 
     
+}
+
+
+-(void)resignAllResponders{
+    [_cardNumberTextField resignFirstResponder];
+    [_expirationDateTextField resignFirstResponder];
+    [_cvvTextField resignFirstResponder];
     
     
 }
+
+-(void)clearAllFields{
+    _cardNumberTextField.text = @"";
+    _expirationDateTextField.text = @"";
+    _cvvTextField.text = @"";
+    self.cardTypeStatus = KMCardTypeUnknown;
+    _creditCardImageView.image = [self imageForCardStatus];
+    
+    [self closeCardNumberTextField:NO];
+}
+
+
+
+-(void)insertCardIOData:(CardIOCreditCardInfo *)info{
+    
+    
+    switch (info.cardType) {
+        case CardIOCreditCardTypeAmex:
+            self.cardTypeStatus = KMCardTypeAmericanExpress;
+            break;
+        case CardIOCreditCardTypeDiscover:
+            self.cardTypeStatus = KMCardTypeDiscover;
+            break;
+        case CardIOCreditCardTypeJCB:
+            self.cardTypeStatus = KMCardTypeJCB;
+            break;
+        case CardIOCreditCardTypeVisa:
+            self.cardTypeStatus = KMCardTypeVisa;
+            break;
+        case CardIOCreditCardTypeMastercard:
+            self.cardTypeStatus = KMCardTypeMasterCard;
+        default:
+            self.cardTypeStatus = KMCardTypeUnknown;
+            break;
+    }
+    
+    _cardNumberTextField.text = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? [NSString insertSpacesAmexStyleForString:info.cardNumber] : [NSString insertSpacesEveryFourDigitsIntoString:info.cardNumber];
+    
+    _cardNumberTextField.textColor = [[NSString removeNonDigits:_cardNumberTextField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
+    
+    [_cardNumberTextField becomeFirstResponder];
+    
+    [self closeCardNumberTextField:YES];
+    
+}
+
 
 
 
