@@ -8,6 +8,11 @@
 
 #import <UIKit/UIKit.h>
 #import "CardIO.h"
+#import "KMCardData.h"
+#import "KMCardError.h"
+
+
+typedef void (^KMCardDataResponseBlock)(KMCardData *cardData, KMCardError *error);
 
 
 @interface CardEntryView : UIView <UITextFieldDelegate>
@@ -18,5 +23,6 @@
 -(void)insertCardIOData:(CardIOCreditCardInfo *)info;
 
 
+-(void)getCurrentCardDataWithBlock:(KMCardDataResponseBlock)block;
 
 @end

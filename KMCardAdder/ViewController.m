@@ -21,6 +21,10 @@ typedef void (^BlurCompletionBlock)(void);
 @property (strong, nonatomic) UIButton *cancelCameraButton;
 @property (strong, nonatomic) CardIOView *cardIOView;
 @property (strong, nonatomic) CardEntryView *cardEntryView;
+@property (strong, nonatomic) UILabel *errorLabel;
+@property (strong, nonatomic) NSLayoutConstraint *errorLabelHidden_constraint;
+@property (strong, nonatomic) NSLayoutConstraint *errorLabelShown_constraint;
+
 
 @end
 
@@ -32,8 +36,71 @@ typedef void (^BlurCompletionBlock)(void);
 
     [self setupvView];
     
+    [self setupCardEntryView];
+    
+    [self createErrorView];
+
+    [self registerForApplicationStateNotifications];
+
 
 }
+
+
+-(void)setupvView{
+    
+    [self.navigationController.navigationBar setBarTintColor:[UIColor venmoBlue]];
+    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
+    
+    [self.navigationController.navigationBar
+     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
+    
+    [self.navigationController.navigationBar setTranslucent:NO];
+    
+    [self.navigationController setTitle:@"Add A card"];
+    
+    //UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self
+    // action:@selector(clearFields)];
+    //[self.navigationItem setRightBarButtonItem:rightBarButtonItem];
+    
+    self.title = @"Add A Card";
+    
+    self.view.backgroundColor = [UIColor venmoGray];
+    
+    
+    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [cameraButton setBackgroundColor:[UIColor venmoBlue]];
+    [cameraButton setTitle:@"Add Card" forState:UIControlStateNormal];
+    [cameraButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [cameraButton addTarget:self action:@selector(submitButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    
+    [self.view addSubview:cameraButton];
+    
+    
+    NSLayoutConstraint *constraint1x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    
+    NSLayoutConstraint *constraint2x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:-20];
+    
+    NSLayoutConstraint *constraint3x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
+    
+    [self.view addConstraint:constraint1x];
+    [self.view addConstraint:constraint2x];
+    [self.view addConstraint:constraint3x];
+    
+    
+    
+    if ([CardIOUtilities canReadCardWithCamera]){
+        
+        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"camera64"] style:UIBarButtonItemStylePlain target:self action:@selector(showCamera)];
+        
+        [self.navigationItem setRightBarButtonItem:rightBarButtonItem];
+        
+        
+    }
+    
+    
+}
+
 
 -(void)setupCardEntryView{
     
@@ -54,6 +121,33 @@ typedef void (^BlurCompletionBlock)(void);
     [self.view addConstraints:@[constraint1, constraint2, constraint3, constraint4]];
     
     
+    
+}
+
+-(void)createErrorView{
+    
+    _errorLabel = [[UILabel alloc] init];
+    _errorLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    _errorLabel.textAlignment = NSTextAlignmentCenter;
+    [_errorLabel setFont:[UIFont fontWithName:@"Helvetica" size:12.0f]];
+    [_errorLabel setBackgroundColor:[UIColor venmoRed]];
+    
+    [self.view addSubview:_errorLabel];
+    
+    NSLayoutConstraint *constraint_error_1 = [NSLayoutConstraint constraintWithItem:_errorLabel attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:_cardEntryView attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    
+    NSLayoutConstraint *constraint_error_2 = [NSLayoutConstraint constraintWithItem:_errorLabel attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:_cardEntryView attribute:NSLayoutAttributeWidth multiplier:0.0f constant:20];
+    
+    _errorLabelHidden_constraint = [NSLayoutConstraint constraintWithItem:_errorLabel attribute:NSLayoutAttributeBottom relatedBy:NSLayoutRelationEqual toItem:_cardEntryView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0];
+    
+    [self.view addConstraints:@[constraint_error_1, constraint_error_2, _errorLabelHidden_constraint]];
+    
+    _errorLabelShown_constraint = [NSLayoutConstraint constraintWithItem:_errorLabel attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:_cardEntryView attribute:NSLayoutAttributeBottom multiplier:1.0f constant:0];
+    
+    [self.view sendSubviewToBack:_errorLabel];
+    
+    
+    
 }
 
 -(void)clearFields{
@@ -62,81 +156,6 @@ typedef void (^BlurCompletionBlock)(void);
 }
 
 
--(void)setupvView{
-    
-    [self.navigationController.navigationBar setBarTintColor:[UIColor venmoBlue]];
-    [self.navigationController.navigationBar setTintColor:[UIColor whiteColor]];
-    
-    [self.navigationController.navigationBar
-     setTitleTextAttributes:@{NSForegroundColorAttributeName : [UIColor whiteColor]}];
-    
-    [self.navigationController.navigationBar setTranslucent:NO];
-    
-    [self.navigationController setTitle:@"Add A card"];
-    
-    UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self
-                                                                          action:@selector(clearFields)];
-    [self.navigationItem setRightBarButtonItem:rightBarButtonItem];
-    
-    self.title = @"Add A Card";
-    
-//    UITextField *textField = [[UITextField alloc] init];
-//    
-//    textField.placeholder = @"Enter Card #";
-//    textField.backgroundColor = [UIColor whiteColor];
-//    
-//    textField.translatesAutoresizingMaskIntoConstraints = NO;
-//    
-//    [textField setKeyboardType:UIKeyboardTypeNumberPad];
-//    
-//    
-//    [self.view addSubview:textField];
-//    
-    self.view.backgroundColor = [UIColor venmoGray];
-//    
-//    NSLayoutConstraint *constraint1 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
-//    
-//    NSLayoutConstraint *constraint2 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeTop relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeBottom multiplier:0.1f constant:0];
-//    
-//    NSLayoutConstraint *constraint3 = [NSLayoutConstraint constraintWithItem:textField attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
-//    
-//    [self.view addConstraint:constraint1];
-//    [self.view addConstraint:constraint2];
-//    [self.view addConstraint:constraint3];
-    
-    [self setupCardEntryView];
-    
-
-    
-    
-    if ([CardIOUtilities canReadCardWithCamera]){
-        
-        UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
-        [cameraButton setBackgroundColor:[UIColor venmoBlue]];
-        [cameraButton setTitle:@"Or Scan Your Card" forState:UIControlStateNormal];
-        [cameraButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-        [cameraButton addTarget:self action:@selector(showCamera) forControlEvents:UIControlEventTouchUpInside];
-        
-        [self.view addSubview:cameraButton];
-        
-        
-        NSLayoutConstraint *constraint1x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
-        
-        NSLayoutConstraint *constraint2x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:-20];
-        
-        NSLayoutConstraint *constraint3x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
-        
-        [self.view addConstraint:constraint1x];
-        [self.view addConstraint:constraint2x];
-        [self.view addConstraint:constraint3x];
-        
-    }
-    
-    [self registerForApplicationStateNotifications];
-
-    
-}
 
 -(void)registerForApplicationStateNotifications{
     
@@ -158,6 +177,88 @@ typedef void (^BlurCompletionBlock)(void);
 }
 
 
+-(IBAction)submitButtonPressed:(id)sender{
+    
+    
+    [_cardEntryView getCurrentCardDataWithBlock:^(KMCardData *cardData, KMCardError *error) {
+        
+        if (!error){
+            
+
+            
+        } else {
+            
+            NSString *errorMessage = nil;
+            
+            switch (error.errorType) {
+                    
+                case KMCardErrorCard:{
+                    errorMessage = @"card number";
+                }
+                break;
+                    
+                case KMCardErrorDate:{
+                    errorMessage = @"expiration date";
+                }
+                break;
+                    
+                case KMCardErrorCVV:{
+                    errorMessage = @"cvv value";
+
+                }
+                    break;
+                    
+                case KMCardErrorCardAndDate:{
+                    errorMessage = @"card number and expiration date";
+
+                }
+                    break;
+
+                case KMCardErrorDateAndCVV:{
+                    errorMessage = @"expiration date and cvv value";
+
+                }
+                    break;
+                    
+                case KMCardErrorAll:{
+                    errorMessage = @"card number, expiration date, and cvv value";
+                }
+                    break;
+            }
+            
+            [self insertErrorViewWithErrorMessage:[NSString stringWithFormat:@"Invalid %@.", errorMessage] withSender:sender];
+            
+        }
+        
+    }];
+}
+
+-(void)insertErrorViewWithErrorMessage:(NSString*)errorMessage withSender:(id)sender{
+    
+    UIButton *button = (UIButton*)sender;
+    button.enabled = NO;
+    
+    _errorLabel.text = errorMessage;
+    
+    [self.view removeConstraint:_errorLabelHidden_constraint];
+    [self.view addConstraint:_errorLabelShown_constraint];
+    
+    [UIView animateWithDuration:0.3f animations:^{
+        [self.view layoutIfNeeded];
+    } completion:^(BOOL finished) {
+        
+        [self.view removeConstraint:_errorLabelShown_constraint];
+        [self.view addConstraint:_errorLabelHidden_constraint];
+        
+        [UIView animateWithDuration:0.3f delay:3.0f options:UIViewAnimationOptionTransitionNone animations:^{
+            [self.view layoutIfNeeded];
+        } completion:^(BOOL finished) {
+            button.enabled = YES;
+        }];
+    }];
+    
+    
+}
 
 -(void)showCamera{
     
@@ -259,9 +360,7 @@ typedef void (^BlurCompletionBlock)(void);
     [self removeBlurredWindowWithCompletionBlock:^{
         
         if (info) {
-            // The full card number is available as info.cardNumber, but don't log that!
-            
-            NSLog(@"Received card info. Number: %@, expiry: %02i/%i, cvv: %@.", info.redactedCardNumber, info.expiryMonth, info.expiryYear, info.cvv);
+
             [_cardEntryView insertCardIOData:info];
 
         }

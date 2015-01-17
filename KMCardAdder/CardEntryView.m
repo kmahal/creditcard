@@ -35,6 +35,7 @@
 @property (strong, nonatomic) KMCardData *cardData;
 
 @property (nonatomic) int cvvLength;
+@property (nonatomic) int maxCardLength;
 
 
 @end
@@ -51,7 +52,7 @@
     if (self){
         
         
-        _cardTypeStatus = KMCardTypeUnknown;
+        self.cardTypeStatus = KMCardTypeUnknown;
         self.backgroundColor = [UIColor whiteColor];
 
         [self setupCardImageView];
@@ -71,6 +72,7 @@
     _cardData = [[KMCardData alloc] init];
     
     _cvvLength = 3;
+    _maxCardLength = 6;
     
     [self addObserver:self forKeyPath:@"cardData.cardType" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
     [self addObserver:self forKeyPath:@"self.cardTypeStatus" options:NSKeyValueObservingOptionNew | NSKeyValueObservingOptionOld context:nil];
@@ -119,9 +121,9 @@
     
     [_cardContainerView addConstraints:@[constraint5, constraint6]];
     
-    //[self setValue:KMCardTypeUnknown forKey:@"cardType"];
-    [_cardData setCardType:KMCardTypeUnknown];
-    
+
+   // [_cardData setCardType:KMCardTypeUnknown];
+     self.cardTypeStatus = KMCardTypeUnknown;
     
 }
 
@@ -136,7 +138,7 @@
             [self closeCardNumberTextField:NO];
         }
     } else if (textfield == _cvvTextField){
-        _creditCardImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",((_cardTypeStatus == KMCardTypeAmericanExpress) ? @"AmexCVV" : @"CVV")]];
+        _creditCardImageView.image = [UIImage imageNamed:[NSString stringWithFormat:@"%@",((self.cardTypeStatus == KMCardTypeAmericanExpress) ? @"AmexCVV" : @"CVV")]];
     }
 
     
@@ -248,7 +250,7 @@
 
 -(UIImage*)imageForCardStatus{
     
-    switch (_cardTypeStatus) {
+    switch (self.cardTypeStatus) {
         case KMCardTypeUnknown:
             return [UIImage imageNamed:@"GenericCard"];
             break;
@@ -292,53 +294,40 @@
     
     NSString *cardNumberWithSpaces = nil;
     
-    if (_cardTypeStatus == KMCardTypeUnknown){
-        if ([cardNumberWithoutSpaces length] > 6){
-            [textField setText:_previousTextFieldContent];
-            textField.selectedTextRange = _previousSelection;
-            return;
-        }
+    
+    if ([cardNumberWithoutSpaces length] > _maxCardLength){
         
-        cardNumberWithSpaces = cardNumberWithoutSpaces;
+        [textField setText:_previousTextFieldContent];
+        textField.selectedTextRange = _previousSelection;
         
-    } else if (_cardTypeStatus == KMCardTypeAmericanExpress){
-        
-        if ([cardNumberWithoutSpaces length] > 15){
-            [textField setText:_previousTextFieldContent];
-            textField.selectedTextRange = _previousSelection;
+        if (!(self.cardTypeStatus == KMCardTypeUnknown)) {
             
             textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
             
             [self closeCardNumberTextField:YES];
-            return;
-        } else {
-            textField.textColor = [UIColor blackColor];
         }
         
-        cardNumberWithSpaces = [NSString insertSpacesAmexStyleForString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+        return;
 
-     
+        
+        
     } else {
         
-        if ([cardNumberWithoutSpaces length] > 16){
-            [textField setText:_previousTextFieldContent];
-            textField.selectedTextRange = _previousSelection;
-            
-            textField.textColor = [[NSString removeNonDigits:textField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
-
-            
-            [self closeCardNumberTextField:YES];
-
-            return;
-        } else {
-            textField.textColor = [UIColor blackColor];
-
+        textField.textColor = [UIColor blackColor];
+        
+        switch (self.cardTypeStatus) {
+            case KMCardTypeAmericanExpress:
+                cardNumberWithSpaces = [NSString insertSpacesAmexStyleForString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+                break;
+            case KMCardTypeUnknown:
+                cardNumberWithSpaces = cardNumberWithoutSpaces;
+                break;
+            default:
+                cardNumberWithSpaces = [NSString insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
+                break;
         }
         
-        cardNumberWithSpaces = [NSString insertSpacesEveryFourDigitsIntoString:cardNumberWithoutSpaces andPreserveCursorPosition:&targetCursorPosition];
-       
     }
-    
     
     textField.text = cardNumberWithSpaces;
     UITextPosition *targetPosition =
@@ -361,7 +350,7 @@
     
     if (close){
         
-        NSInteger offset = (_cardTypeStatus == KMCardTypeAmericanExpress) ? -5 : -4;
+        NSInteger offset = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? -5 : -4;
         
         UITextPosition *Pos2 = [_cardNumberTextField positionFromPosition: _cardNumberTextField.endOfDocument offset: 0];
         UITextPosition *Pos1 = [_cardNumberTextField positionFromPosition: _cardNumberTextField.endOfDocument offset: offset];
@@ -414,18 +403,18 @@
     switch (str.length) {
         case 1:
         {
-            _cardTypeStatus = (ccValue == 4) ? KMCardTypeVisa : KMCardTypeUnknown;
+            self.cardTypeStatus = (ccValue == 4) ? KMCardTypeVisa : KMCardTypeUnknown;
         }
             break;
         case 2:
         {
             
             if ((ccValue == 34) || (ccValue == 37)){
-                _cardTypeStatus = KMCardTypeAmericanExpress;
+                self.cardTypeStatus = KMCardTypeAmericanExpress;
             } else if ((NSLocationInRange([[str substringToIndex:2] intValue], NSMakeRange(51, (55-51))))){
-                _cardTypeStatus = KMCardTypeMasterCard;
+                self.cardTypeStatus = KMCardTypeMasterCard;
             } else if (ccValue == 65){
-                _cardTypeStatus = KMCardTypeDiscover;
+                self.cardTypeStatus = KMCardTypeDiscover;
             }
             
         }
@@ -433,7 +422,7 @@
             
         case 3:
         {
-            _cardTypeStatus = (NSLocationInRange(ccValue, NSMakeRange(644, (649-644)))) ? KMCardTypeDiscover : _cardTypeStatus;
+            self.cardTypeStatus = (NSLocationInRange(ccValue, NSMakeRange(644, (649-644)))) ? KMCardTypeDiscover : self.cardTypeStatus;
         }
             break;
             
@@ -441,9 +430,9 @@
         {
 
             if ((NSLocationInRange(ccValue, NSMakeRange(3528, (3589-3528))))){
-                _cardTypeStatus = KMCardTypeJCB;
+                self.cardTypeStatus = KMCardTypeJCB;
             } else if (ccValue == 6011){
-                _cardTypeStatus = KMCardTypeDiscover;
+                self.cardTypeStatus = KMCardTypeDiscover;
             }
             
         }
@@ -454,16 +443,13 @@
         {
             
             if ((NSLocationInRange(ccValue, NSMakeRange(622126, (622925-622126))))){
-                _cardTypeStatus = KMCardTypeDiscover;
+                self.cardTypeStatus = KMCardTypeDiscover;
             }
             break;
         }
         default:
             break;
     }
-    
-    _creditCardImageView.image = [self imageForCardStatus];
-
     
     
 }
@@ -512,7 +498,9 @@ replacementString:(NSString *)string
         if (textField.text.length == filter.length) [_cvvTextField becomeFirstResponder];
         
         return NO;
+        
     } else if (textField == _cvvTextField){
+        
         NSUInteger oldLength = [textField.text length];
         NSUInteger replacementLength = [string length];
         NSUInteger rangeLength = range.length;
@@ -521,7 +509,7 @@ replacementString:(NSString *)string
         
         BOOL returnKey = [string rangeOfString: @"\n"].location != NSNotFound;
         
-        return newLength <= ((_cardTypeStatus == KMCardTypeAmericanExpress) ? 4 : 3) || returnKey;
+        return newLength <= ((self.cardTypeStatus == KMCardTypeAmericanExpress) ? 4 : 3) || returnKey;
     }
     
     return YES;
@@ -534,7 +522,7 @@ replacementString:(NSString *)string
     _cardNumberTextField.text = @"";
     _expirationDateTextField.text = @"";
     _cvvTextField.text = @"";
-    _cardTypeStatus = KMCardTypeUnknown;
+    self.cardTypeStatus = KMCardTypeUnknown;
     _creditCardImageView.image = [self imageForCardStatus];
     
     [self closeCardNumberTextField:NO];
@@ -554,27 +542,25 @@ replacementString:(NSString *)string
     
     switch (info.cardType) {
         case CardIOCreditCardTypeAmex:
-            _cardTypeStatus = KMCardTypeAmericanExpress;
+            self.cardTypeStatus = KMCardTypeAmericanExpress;
             break;
         case CardIOCreditCardTypeDiscover:
-            _cardTypeStatus = KMCardTypeDiscover;
+            self.cardTypeStatus = KMCardTypeDiscover;
             break;
         case CardIOCreditCardTypeJCB:
-            _cardTypeStatus = KMCardTypeJCB;
+            self.cardTypeStatus = KMCardTypeJCB;
             break;
         case CardIOCreditCardTypeVisa:
-            _cardTypeStatus = KMCardTypeVisa;
+            self.cardTypeStatus = KMCardTypeVisa;
             break;
         case CardIOCreditCardTypeMastercard:
-            _cardTypeStatus = KMCardTypeMasterCard;
+            self.cardTypeStatus = KMCardTypeMasterCard;
         default:
-            _cardTypeStatus = KMCardTypeUnknown;
+            self.cardTypeStatus = KMCardTypeUnknown;
             break;
     }
     
-    _creditCardImageView.image = [self imageForCardStatus];
-    
-    _cardNumberTextField.text = (_cardTypeStatus == KMCardTypeAmericanExpress) ? [NSString insertSpacesAmexStyleForString:info.cardNumber] : [NSString insertSpacesEveryFourDigitsIntoString:info.cardNumber];
+    _cardNumberTextField.text = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? [NSString insertSpacesAmexStyleForString:info.cardNumber] : [NSString insertSpacesEveryFourDigitsIntoString:info.cardNumber];
 
     _cardNumberTextField.textColor = [[NSString removeNonDigits:_cardNumberTextField.text] doesPassLuhnAlgorithm] ? [UIColor blackColor] : [UIColor venmoRed];
 
@@ -598,9 +584,66 @@ replacementString:(NSString *)string
     } else if ([keyPath isEqualToString:@"self.cardTypeStatus"]){
         _cvvLength = ([[change objectForKey:@"new"] intValue] == KMCardTypeAmericanExpress ) ? 4 : 3;
         
+        if (self.cardTypeStatus == KMCardTypeUnknown){
+            _maxCardLength = 6;
+        } else {
+            _maxCardLength = (self.cardTypeStatus == KMCardTypeAmericanExpress) ? 15 : 16;
+        }
+        
+        _creditCardImageView.image = [self imageForCardStatus];
+        
     }
     
 }
+
+
+-(void)getCurrentCardDataWithBlock:(KMCardDataResponseBlock)block{
+    
+    int errorCount = 0;
+    
+    BOOL cardValue = (([NSString removeNonDigits:_cardNumberTextField.text].length == _maxCardLength) && [_cardNumberTextField.text doesPassLuhnAlgorithm]);
+    
+    BOOL dateValue = (_expirationDateTextField.text.length == 5);
+    
+    BOOL cvvValue = (_cvvTextField.text.length == _cvvLength);
+    
+    
+    if (cardValue) {
+        _cardData.cardNumber = [NSString removeNonDigits:_cardNumberTextField.text];
+    } else {
+        errorCount += 1;
+    }
+    if (dateValue){
+        _cardData.expirationMonth = [[_expirationDateTextField.text substringToIndex:2] intValue];
+        _cardData.expirationYear = [[_expirationDateTextField.text substringFromIndex:3] intValue];
+    } else {
+        errorCount +=2;
+    }
+    if (cvvValue){
+        _cardData.cvv = _cvvTextField.text;
+    } else {
+        errorCount += 3;
+    }
+    
+    _cardData.cardType = self.cardTypeStatus;
+
+    
+    if (errorCount == 0) {
+        block(_cardData, nil);
+        return;
+    }
+    
+    
+    KMCardError *error = [[KMCardError alloc] init];
+    error.errorType = errorCount;
+    
+    block(_cardData, error);
+
+    
+    
+    
+}
+
 
 
 

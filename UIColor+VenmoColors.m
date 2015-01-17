@@ -30,7 +30,7 @@
 
 +(UIColor*)venmoRed{
     
-    return [UIColor colorWithHexString:@"#E91A1A"];
+    return [UIColor colorWithHexString:@"#FF999A"];
 }
 
 + (UIColor *)colorWithHexString:(NSString *)str {
