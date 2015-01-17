@@ -295,10 +295,13 @@
     NSString *cardNumberWithSpaces = nil;
     
     
-    if ([cardNumberWithoutSpaces length] > _maxCardLength){
+    if ([cardNumberWithoutSpaces length] >= _maxCardLength){
         
-        [textField setText:_previousTextFieldContent];
-        textField.selectedTextRange = _previousSelection;
+        if ([cardNumberWithoutSpaces length] > _maxCardLength){
+            [textField setText:_previousTextFieldContent];
+            textField.selectedTextRange = _previousSelection;
+        }
+
         
         if (!(self.cardTypeStatus == KMCardTypeUnknown)) {
             
