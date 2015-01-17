@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "UIColor+VenmoColors.h"
 #import "UIImage+BlurredView.h"
-#import "CardEntryView.h"
+#import "KMCardEntryView.h"
 
 typedef void (^BlurCompletionBlock)(void);
 
@@ -20,7 +20,7 @@ typedef void (^BlurCompletionBlock)(void);
 @property (strong, nonatomic) UIImageView *blurredImageView;
 @property (strong, nonatomic) UIButton *cancelCameraButton;
 @property (strong, nonatomic) CardIOView *cardIOView;
-@property (strong, nonatomic) CardEntryView *cardEntryView;
+@property (strong, nonatomic) KMCardEntryView *cardEntryView;
 @property (strong, nonatomic) UILabel *errorLabel;
 @property (strong, nonatomic) NSLayoutConstraint *errorLabelHidden_constraint;
 @property (strong, nonatomic) NSLayoutConstraint *errorLabelShown_constraint;
@@ -115,7 +115,7 @@ typedef void (^BlurCompletionBlock)(void);
 -(void)setupCardEntryView{
     
     
-    _cardEntryView = [[CardEntryView alloc] init];
+    _cardEntryView = [[KMCardEntryView alloc] init];
     _cardEntryView.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self.view addSubview:_cardEntryView];
@@ -245,6 +245,8 @@ typedef void (^BlurCompletionBlock)(void);
             }
             
             [self insertSuccessViewWithMessage:[NSString stringWithFormat:@"%@ %@, %d/%d was added!", string, cardData.redactedCardNumber, cardData.expirationMonth, cardData.expirationYear]];
+            
+            [self clearFields];
             
         } else {
             

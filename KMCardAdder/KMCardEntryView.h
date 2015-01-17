@@ -15,7 +15,7 @@
 typedef void (^KMCardDataResponseBlock)(KMCardData *cardData, KMCardError *error);
 
 
-@interface CardEntryView : UIView <UITextFieldDelegate>
+@interface KMCardEntryView : UIView <UITextFieldDelegate>
 
 -(void)clearAllFields;
 -(void)resignAllResponders;

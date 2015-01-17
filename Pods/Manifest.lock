@@ -1,10 +1,13 @@
 PODS:
   - CardIO (4.0.2)
+  - Kiwi (2.3.1)
 
 DEPENDENCIES:
   - CardIO
+  - Kiwi
 
 SPEC CHECKSUMS:
   CardIO: 1aa33ee9ebee155e662d7f1b441aef2961890b25
+  Kiwi: 73e1400209055ee9c8ba78c6012b6b642d0fb9f7
 
 COCOAPODS: 0.35.0

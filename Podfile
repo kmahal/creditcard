@@ -7,7 +7,10 @@ pod 'CardIO'
 
 end
 
-target 'KMCardAdderTests' do
+target 'KMCardAdderTests', :exclusive => true do
+    
+    pod 'Kiwi'
+
 
 end
 

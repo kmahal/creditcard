@@ -7,7 +7,7 @@
 //
 
 
-#import "CardEntryView.h"
+#import "KMCardEntryView.h"
 #import "NSArray+Reverse.h"
 #import "NSString+CardValidation.h"
 #import "UIColor+VenmoColors.h"
@@ -15,7 +15,7 @@
 #import "KMCardData.h"
 
 
-@interface CardEntryView()
+@interface KMCardEntryView()
 
 @property (strong, nonatomic) UITextField *cardNumberTextField;
 @property (strong, nonatomic) UITextField *expirationDateTextField;
@@ -40,8 +40,7 @@
 
 @end
 
-@implementation CardEntryView
-
+@implementation KMCardEntryView
 
 
 
@@ -473,7 +472,7 @@
 shouldChangeCharactersInRange:(NSRange)range
 replacementString:(NSString *)string
 {
-    // Note textField's current state before performing the change, in case
+    // Note card number's current state before performing the change, in case
     // reformatTextField wants to revert it
     
     if (textField == _cardNumberTextField){
@@ -537,14 +536,11 @@ replacementString:(NSString *)string
 
 -(void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context{
     
-    NSLog(@"shit happening for key path: %@", keyPath);
     
     NSLog(@"change: %@", change);
     
-    if ([keyPath isEqualToString:@"cardData.cardType"]){
-        _cvvLength = ([[change objectForKey:@"new"] intValue] == KMCardTypeAmericanExpress ) ? 4 : 3;
-        
-    } else if ([keyPath isEqualToString:@"self.cardTypeStatus"]){
+
+    if ([keyPath isEqualToString:@"self.cardTypeStatus"]){
         _cvvLength = ([[change objectForKey:@"new"] intValue] == KMCardTypeAmericanExpress ) ? 4 : 3;
         
         if (self.cardTypeStatus == KMCardTypeUnknown){
