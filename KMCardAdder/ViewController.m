@@ -81,21 +81,21 @@ typedef void (^BlurCompletionBlock)(void);
     self.view.backgroundColor = [UIColor venmoGray];
     
     
-    UIButton *cameraButton = [UIButton buttonWithType:UIButtonTypeCustom];
-    cameraButton.translatesAutoresizingMaskIntoConstraints = NO;
-    [cameraButton setBackgroundColor:[UIColor venmoBlue]];
-    [cameraButton setTitle:@"Add Card" forState:UIControlStateNormal];
-    [cameraButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [cameraButton addTarget:self action:@selector(submitButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
+    UIButton *addCardButton = [UIButton buttonWithType:UIButtonTypeCustom];
+    addCardButton.translatesAutoresizingMaskIntoConstraints = NO;
+    [addCardButton setBackgroundColor:[UIColor venmoBlue]];
+    [addCardButton setTitle:@"Add Card" forState:UIControlStateNormal];
+    [addCardButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    [addCardButton addTarget:self action:@selector(submitButtonPressed:) forControlEvents:UIControlEventTouchUpInside];
     
-    [self.view addSubview:cameraButton];
+    [self.view addSubview:addCardButton];
     
     
-    NSLayoutConstraint *constraint1x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
+    NSLayoutConstraint *constraint1x = [NSLayoutConstraint constraintWithItem:addCardButton attribute:NSLayoutAttributeWidth relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeWidth multiplier:1.0f constant:0];
     
-    NSLayoutConstraint *constraint2x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:-20];
+    NSLayoutConstraint *constraint2x = [NSLayoutConstraint constraintWithItem:addCardButton attribute:NSLayoutAttributeCenterY relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeCenterY multiplier:1.0f constant:-30];
     
-    NSLayoutConstraint *constraint3x = [NSLayoutConstraint constraintWithItem:cameraButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
+    NSLayoutConstraint *constraint3x = [NSLayoutConstraint constraintWithItem:addCardButton attribute:NSLayoutAttributeHeight relatedBy:NSLayoutRelationEqual toItem:self.view attribute:NSLayoutAttributeHeight multiplier:0 constant:40];
     
     [self.view addConstraint:constraint1x];
     [self.view addConstraint:constraint2x];
