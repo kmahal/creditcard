@@ -163,13 +163,15 @@ Credit card information is sensitive.  So when the application resigns active or
 Testing
 ---------
 
-Testing was done using Kiwi.  I do not have a strong background in testing, and so it was a good challenge to learn a new skill.
+Testing was done using Kiwi.  I've never done automated testing before, but set up Kiwi into my project and read about the testing process.  Kiwi is great for model testing, and as this application is not model intensive I was not able to find a way to create reasonable tests in a moderate amount of time.
 
 I also did reading on UI Automation frameworks like KIF which are really powerful.  To limit the time of this project however I did not dive into that, and wrote a simple Kiwi test.  I plan on reading up more about both and implementing them into my current work projects as well.
 
 In addition to the automated testing, I also ran through every requirement use case myself, testing corner cases and core functionality.
 
-
+Design
+--------
+All colors were found from: http://brand.venmo.com/styleguide#section-logo-colors 
 
 
 
