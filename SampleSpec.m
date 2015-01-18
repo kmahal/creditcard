@@ -1,35 +1,38 @@
 #import "Kiwi.h"
 #import "KMCardData.h"
+#import "KMCardEntryView.h"
+#import "KMCardEntryView_privateProperties.h"
 
-SPEC_BEGIN(MathSpec)
+SPEC_BEGIN(AppSpec)
 
-describe(@"Math", ^{
-    it(@"is pretty cool", ^{
-        NSUInteger a = 16;
-        NSUInteger b = 26;
-        [[theValue(a + b) should] equal:theValue(42)];
-    });
-});
 
 describe(@"Card Data", ^{
-    context(@"when first testing", ^{
-        it(@"is nil", ^{
-            NSString *value = nil;
-            
-            
-            
-            [[value should] beNil];
-        
-        });
-        
-        it(@"should have length", ^{
-            KMCardData *data = [[KMCardData alloc] init];
-            
-            data.cardNumber = @"1234567890123456";
-            
-            [[theValue(data.cardNumber.length) should] equal:theValue(16)];
-        });
+    
+    __block KMCardData *cardData;
+    
+    beforeEach(^{
+        cardData = [[KMCardData alloc] init];
     });
+    
+    afterEach(^{
+        cardData = nil;
+    });
+    
+    it(@"should exist", ^{
+        [[cardData shouldNot] beNil];
+    });
+    
+    context(@"allows for card entry", ^{
+        
+        it(@"should be nil", ^{
+            
+        });
+        
+    });
+    
+
+    
+
 });
 
 SPEC_END

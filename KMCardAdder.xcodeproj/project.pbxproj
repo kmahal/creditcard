@@ -80,6 +80,7 @@
 		5AA887531A6A3BF0005E09A6 /* KMCardError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMCardError.h; sourceTree = "<group>"; };
 		5AA887541A6A3BF0005E09A6 /* KMCardError.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = KMCardError.m; sourceTree = "<group>"; };
 		5AA887571A6A6FB3005E09A6 /* SampleSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SampleSpec.m; path = ../SampleSpec.m; sourceTree = "<group>"; };
+		5AA887591A6B3D63005E09A6 /* KMCardEntryView_privateProperties.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = KMCardEntryView_privateProperties.h; sourceTree = "<group>"; };
 		5AEA23471A66438C00865999 /* UIImage+BlurredView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIImage+BlurredView.h"; sourceTree = "<group>"; };
 		5AEA23481A66438C00865999 /* UIImage+BlurredView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIImage+BlurredView.m"; sourceTree = "<group>"; };
 		5AEA234A1A6643B200865999 /* FXBlurView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FXBlurView.h; sourceTree = "<group>"; };
@@ -222,6 +223,7 @@
 			children = (
 				5AEA234D1A66562E00865999 /* KMCardEntryView.h */,
 				5AEA234E1A66562E00865999 /* KMCardEntryView.m */,
+				5AA887591A6B3D63005E09A6 /* KMCardEntryView_privateProperties.h */,
 			);
 			name = "Custom Views";
 			sourceTree = "<group>";

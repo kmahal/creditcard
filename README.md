@@ -163,9 +163,11 @@ Credit card information is sensitive.  So when the application resigns active or
 Testing
 ---------
 
-Testing was done using Kiwi.  I do not have a strong background in testing, and so it was a good challenge to learn a new skill!
+Testing was done using Kiwi.  I do not have a strong background in testing, and so it was a good challenge to learn a new skill.
 
-I also did reading on UI Automation frameworks like KIF which are really powerful.  To limit the time of this project however I did not dive into that, and wrote simple Kiwi tests.  I plan on reading up more about both and implementing them into my current work projects as well.
+I also did reading on UI Automation frameworks like KIF which are really powerful.  To limit the time of this project however I did not dive into that, and wrote a simple Kiwi test.  I plan on reading up more about both and implementing them into my current work projects as well.
+
+In addition to the automated testing, I also ran through every requirement use case myself, testing corner cases and core functionality.
 
 
 

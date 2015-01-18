@@ -50,6 +50,11 @@ typedef void (^BlurCompletionBlock)(void);
 }
 
 
+-(void)viewDidAppear:(BOOL)animated{
+    [self blurWindow];
+}
+
+
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -68,9 +73,8 @@ typedef void (^BlurCompletionBlock)(void);
     
     [self.navigationController.navigationBar setTranslucent:NO];
         
-    //UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self
-    // action:@selector(clearFields)];
-    //[self.navigationItem setRightBarButtonItem:rightBarButtonItem];
+    UIBarButtonItem *leftBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Clear" style:UIBarButtonItemStylePlain target:self action:@selector(clearFields)];
+    [self.navigationItem setLeftBarButtonItem:leftBarButtonItem];
     
     self.title = @"Add A Card";
     
@@ -398,13 +402,19 @@ typedef void (^BlurCompletionBlock)(void);
 
 #pragma mark blurring methods
 
--(void)blurWindowWithCompletionBlock:(BlurCompletionBlock)block{
+
+-(void)blurWindow{
     
-    _blurredContainerView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
-    [[[[UIApplication sharedApplication] delegate] window] addSubview:_blurredContainerView];
+    if (!_blurredContainerView){
+        _blurredContainerView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+        [[[[UIApplication sharedApplication] delegate] window] addSubview:_blurredContainerView];
+        
+        _blurredImageView = [[UIImageView alloc] initWithFrame:_blurredContainerView.bounds];
+        [_blurredContainerView addSubview:_blurredImageView];
+    }
+
     [_blurredContainerView setAlpha:0.0f];
-    
-    _blurredImageView = [[UIImageView alloc] initWithFrame:_blurredContainerView.bounds];
+
     
     UIGraphicsBeginImageContext([UIScreen mainScreen].bounds.size);
     
@@ -413,7 +423,12 @@ typedef void (^BlurCompletionBlock)(void);
     UIGraphicsEndImageContext();
     
     _blurredImageView.image = [image blurredImageWithRadius:10.0f iterations:1 tintColor:[UIColor clearColor]];
-    [_blurredContainerView addSubview:_blurredImageView];
+    
+}
+
+-(void)blurWindowWithCompletionBlock:(BlurCompletionBlock)block{
+    
+    [self blurWindow];
     
     [UIView animateWithDuration:0.5f animations:^{
         [_blurredContainerView setAlpha:1.0f];
